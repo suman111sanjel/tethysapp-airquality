@@ -10,3 +10,7 @@
 .idea/
 services.yml
 tethysapp/airquality/vairquality/node_modules/
+build/
+dist/
+tethysapp/airquality/workspaces/app_workspace/MapImage/
+tethysapp/airquality/__pycache__/
