@@ -115,23 +115,24 @@ def getGeoJSONSofOnetations(StationObjectString,ModelClassDataListStr,typeName,S
                 func.date(ModelClassDataList.date_time) < endDate).order_by(
                 ModelClassDataList.date_time.asc())
 
-            if(TimeseriesData.count()):
-                featureObject = {
-                    'type': 'Feature',
-                    'geometry': {
-                        'type': 'Point',
-                        'coordinates': [-87.650175, 41.850385]
-                    },
-                    'properties': {
-                    }
+            # updated
+            # if(TimeseriesData.count()):
+            featureObject = {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-87.650175, 41.850385]
+                },
+                'properties': {
                 }
-                geoJSONstr = session.query(func.ST_AsGeoJSON(func.ST_Transform(i.geom, 3857)))[0][0]
-                geoJSON = ast.literal_eval(str(geoJSONstr))
-                featureObject['geometry']['coordinates'] = geoJSON["coordinates"]
-                featureObject['properties']['folder_name'] = i.folder_name
-                featureObject['properties']['id'] = i.st_id
-                featureObject['properties']['name'] = i.name
-                GeojsonObject3857['features'].append(featureObject)
+            }
+            geoJSONstr = session.query(func.ST_AsGeoJSON(func.ST_Transform(i.geom, 3857)))[0][0]
+            geoJSON = ast.literal_eval(str(geoJSONstr))
+            featureObject['geometry']['coordinates'] = geoJSON["coordinates"]
+            featureObject['properties']['folder_name'] = i.folder_name
+            featureObject['properties']['id'] = i.st_id
+            featureObject['properties']['name'] = i.name
+            GeojsonObject3857['features'].append(featureObject)
         session.close()
     except:
         traceback.print_exc()
@@ -269,8 +270,10 @@ def plotNcFile(ncFileName, parameterName, title, labelName, dataRange, colorSche
     c_scheme = mp.pcolor(x, y, selectedData, cmap=colorScheme, vmin=dataRange[0], vmax=dataRange[1])
 
     if rid==0:
-        pass
-        mp.drawcoastlines()
+        try:
+            mp.drawcoastlines()
+        except:
+            pass
     else:
         mp.drawcountries()
 
@@ -461,7 +464,7 @@ def TimeSeriesModelDataCompute(collectionDir, parameterName, wkt,WKTType):
         deltaLatsAbs = numpy.abs(deltaLats)
         deltaLonsAbs = numpy.abs(deltaLons)
 
-        if WKTType=='point':
+        if WKTType=='Point':
             stn_lat=float(wkt.split("(")[1].split(")")[0].split(" ")[1])
             stn_lon=float(wkt.split("(")[1].split(")")[0].split(" ")[0])
             abslat = numpy.abs(lats - stn_lat)  # Finding the absolute latitude
@@ -487,7 +490,7 @@ def TimeSeriesModelDataCompute(collectionDir, parameterName, wkt,WKTType):
             AllDates.append(dt_str.date())
 
             interestedValue=None
-            if WKTType == 'polygon':
+            if WKTType == 'Polygon':
                 tt = rstats.zonal_stats(wkt, nc_arr, affine=geotransform, stats='mean')
                 interestedValue=tt[0]['mean']
             else:

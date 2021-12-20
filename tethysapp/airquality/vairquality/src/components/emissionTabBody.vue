@@ -10,7 +10,7 @@
       <el-row class="second-row">
         <el-col :span="24"
                 class="full-height full-width padding-left-10 padding-bottom-10 padding-top-5 padding-right-5">
-            <chartComponent></chartComponent>
+            <chartComponent  :IndexValue="1"></chartComponent>
         </el-col>
       </el-row>
     </el-col>
@@ -24,11 +24,11 @@
       <el-row class="second-row">
         <el-col :span="12"
                 class="full-height full-width padding-left-5 padding-bottom-10 padding-top-5 padding-right-5">
-          <chartComponent></chartComponent>
+          <chartComponent  :IndexValue="2"></chartComponent>
         </el-col>
         <el-col :span="12"
                 class="full-height full-width padding-left-5 padding-bottom-10 padding-top-5 padding-right-5">
-          <chartComponent></chartComponent>
+          <chartComponent  :IndexValue="3"></chartComponent>
         </el-col>
       </el-row>
     </el-col>
@@ -43,7 +43,7 @@
       <el-row class="second-row">
         <el-col :span="24"
                 class="full-height full-width padding-left-5 padding-bottom-10 padding-top-5 padding-right-10">
-          <chartComponent></chartComponent>
+          <chartComponent  :IndexValue="4"></chartComponent>
         </el-col>
       </el-row>
     </el-col>

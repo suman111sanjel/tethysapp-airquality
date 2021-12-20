@@ -44,14 +44,18 @@ module.exports = {
         plugins: [
             new CleanWebpackPlugin(),
         ],
+
     },
     pages: {
         'apps/airquality': {
             entry: 'src/airquality.js',
             template: 'public/index.html',
             filename: process.env.NODE_ENV === "production" ? '../../templates/airquality/Created_airquality.html' : 'apps/airquality/airquality.html',
-            title: 'Air Quality Watch - air quality',
+            title: 'Air Quality Watch Dashboard',
             chunks: ['chunk-vendors', 'chunk-common', 'apps/airquality']
         },
     }
 }
+
+
+

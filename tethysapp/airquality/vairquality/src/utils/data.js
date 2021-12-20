@@ -5,6 +5,7 @@ import Stroke from "ol/style/Stroke"
 import Text from "ol/style/Text"
 import {TethysAppName, DefaultMaskWMS, DefaultPlotInfo, TethysAPIAppName} from "../config";
 
+
 var myApp = {};
 // First need to initilize
 var filterCoodrdinate = {};
@@ -14,9 +15,14 @@ myApp.startDate = new Date();
 myApp.startDate.setDate(myApp.startDate.getDate() - 1);
 myApp.endDate = new Date();
 
+myApp.startDateArchive = new Date();
+myApp.startDateArchive.setDate(myApp.startDateArchive.getDate() - 1);
+myApp.endDateArchive = new Date();
 
 myApp.forecastDate = new Date();
 myApp.forecastDate.setDate(myApp.forecastDate.getDate() - 1);
+
+myApp.IndexColors = ['#0C6CE9', '#962422', '#1D5430', '#F76743'];
 
 
 myApp.APICollection = {
@@ -99,182 +105,80 @@ myApp.getLayer = function (id) {
 
 myApp.AeronetAODStyleFun = function (feature, resolution) {
     let name = feature.get('name');
-    let id = feature.get('id').toString();
 
     if (resolution > 2445.98490512564) {
         name = ''
     }
-    let selectedList = myApp.getLayer(myApp.constants.recent.layerId.PM_AeronetAOD).get('selId');
     let AeronetStyle = null;
-    // let selObject = selectedList.filter(x => x.featureId === id)[0]
-    let selObject = selectedList.filter(function (x) {
-        let tf = false;
-        if (x) {
-            if (x.featureId === id) {
-                tf = true;
-            }
-        }
-        return tf
-    })[0]
-    if (selObject) {
-        if (selObject.featureId === id) {
-            AeronetStyle = new Style({
-                image: new RegularShape({
-                    fill: new Fill({color: myApp.IndexColors[selObject.index]}),
-                    stroke: new Stroke({color: 'white', width: 1}),
-                    points: 3,
-                    radius: 10,
-                    rotation: 0,
-                    angle: 0
-                }),
-                text: new Text({
-                    font: "normal 12px Arial",
-                    text: name,
-                    fill: new Fill({color: '#aa3300'}),
-                    stroke: new Stroke({color: '#ffffff', width: 3}),
-                    offsetX: 0,
-                    offsetY: 15,
-                })
-            });
-        }
-    } else {
-        AeronetStyle = new Style({
-            image: new RegularShape({
-                fill: new Fill({color: '#D5212E'}),
-                stroke: new Stroke({color: 'black', width: 1}),
-                points: 3,
-                radius: 10,
-                rotation: 0,
-                angle: 0
-            }),
-            text: new Text({
-                font: "normal 12px Arial",
-                text: name,
-                fill: new Fill({color: '#aa3300'}),
-                stroke: new Stroke({color: '#ffffff', width: 3}),
-                offsetX: 0,
-                offsetY: 15,
-            })
-        });
-    }
+    AeronetStyle = new Style({
+        image: new RegularShape({
+            fill: new Fill({color: '#D5212E'}),
+            stroke: new Stroke({color: 'black', width: 1}),
+            points: 3,
+            radius: 10,
+            rotation: 0,
+            angle: 0
+        }),
+        text: new Text({
+            font: "normal 12px Arial",
+            text: name,
+            fill: new Fill({color: '#aa3300'}),
+            stroke: new Stroke({color: '#ffffff', width: 3}),
+            offsetX: 0,
+            offsetY: 15,
+        })
+    });
     return AeronetStyle;
 };
 myApp.USEmbassyPM25StyleFun = function (feature, resolution) {
     let name = feature.get('name');
-    let id = feature.get('id').toString();
 
     if (resolution > 2445.98490512564) {
         name = ''
     }
-    let selectedList = myApp.getLayer(myApp.constants.recent.layerId.PM_usembassy).get('selId');
     let USEmbassyAODStyle = null;
-    let selObject = selectedList.filter(function (x) {
-        let tf = false;
-        if (x) {
-            if (x.featureId === id) {
-                tf = true;
-            }
-        }
-        return tf
-    })[0]
-    if (selObject) {
-        if (selObject.featureId === id) {
-            USEmbassyAODStyle = new Style({
-                image: new RegularShape({
-                    fill: new Fill({color: myApp.IndexColors[selObject.index]}),
-                    stroke: new Stroke({color: 'white', width: 1}),
-                    points: 4,
-                    radius: 10,
-                    angle: Math.PI / 4
-                }),
-                text: new Text({
-                    font: "normal 12px Arial",
-                    text: name,
-                    fill: new Fill({color: '#aa3300'}),
-                    stroke: new Stroke({color: '#ffffff', width: 3}),
-                    offsetX: 0,
-                    offsetY: 15,
-                })
-            });
-        }
-    } else {
-        USEmbassyAODStyle = new Style({
-            image: new RegularShape({
-                fill: new Fill({color: '#CBCB59'}),
-                stroke: new Stroke({color: 'black', width: 1}),
-                points: 4,
-                radius: 10,
-                angle: Math.PI / 4
-            }),
-            text: new Text({
-                font: "normal 12px Arial",
-                text: name,
-                fill: new Fill({color: '#aa3300'}),
-                stroke: new Stroke({color: '#ffffff', width: 3}),
-                offsetX: 0,
-                offsetY: 15,
-            })
-        });
-    }
+    USEmbassyAODStyle = new Style({
+        image: new RegularShape({
+            fill: new Fill({color: '#CBCB59'}),
+            stroke: new Stroke({color: 'black', width: 1}),
+            points: 4,
+            radius: 10,
+            angle: Math.PI / 4
+        }),
+        text: new Text({
+            font: "normal 12px Arial",
+            text: name,
+            fill: new Fill({color: '#aa3300'}),
+            stroke: new Stroke({color: '#ffffff', width: 3}),
+            offsetX: 0,
+            offsetY: 15,
+        })
+    });
     return USEmbassyAODStyle;
 };
 myApp.USEmbassyO3StyleFun = function (feature, resolution) {
     let name = feature.get('name');
-    let id = feature.get('id').toString();
-
     if (resolution > 2445.98490512564) {
         name = ''
     }
-    let selectedList = myApp.getLayer(myApp.constants.recent.layerId.O3_usembassy).get('selId');
     let USEmbassyAODStyle = null;
-    let selObject = selectedList.filter(function (x) {
-        let tf = false;
-        if (x) {
-            if (x.featureId === id) {
-                tf = true;
-            }
-        }
-        return tf
-    })[0]
-    if (selObject) {
-        if (selObject.featureId === id) {
-            USEmbassyAODStyle = new Style({
-                image: new RegularShape({
-                    fill: new Fill({color: myApp.IndexColors[selObject.index]}),
-                    stroke: new Stroke({color: 'white', width: 1}),
-                    points: 4,
-                    radius: 10,
-                    angle: Math.PI / 4
-                }),
-                text: new Text({
-                    font: "normal 12px Arial",
-                    text: name,
-                    fill: new Fill({color: '#aa3300'}),
-                    stroke: new Stroke({color: '#ffffff', width: 3}),
-                    offsetX: 0,
-                    offsetY: 15,
-                })
-            });
-        }
-    } else {
-        USEmbassyAODStyle = new Style({
-            image: new RegularShape({
-                fill: new Fill({color: '#CBCB59'}),
-                stroke: new Stroke({color: 'black', width: 1}),
-                points: 4,
-                radius: 10,
-                angle: Math.PI / 4
-            }),
-            text: new Text({
-                font: "normal 12px Arial",
-                text: name,
-                fill: new Fill({color: '#aa3300'}),
-                stroke: new Stroke({color: '#ffffff', width: 3}),
-                offsetX: 0,
-                offsetY: 15,
-            })
-        });
-    }
+    USEmbassyAODStyle = new Style({
+        image: new RegularShape({
+            fill: new Fill({color: '#CBCB59'}),
+            stroke: new Stroke({color: 'black', width: 1}),
+            points: 4,
+            radius: 10,
+            angle: Math.PI / 4
+        }),
+        text: new Text({
+            font: "normal 12px Arial",
+            text: name,
+            fill: new Fill({color: '#aa3300'}),
+            stroke: new Stroke({color: '#ffffff', width: 3}),
+            offsetX: 0,
+            offsetY: 15,
+        })
+    });
     return USEmbassyAODStyle;
 };
 
@@ -350,13 +254,13 @@ myApp.LayerCollectionObjet = {
                 getEndDate: function () {
                     return myApp.formatDate(myApp.startDate)
                 },
-                VisibleDivBind: true,
+                VisibleDivBind: false,
                 threddLayerProp: {
                     id: myApp.constants.recent.layerId.TerraModisTrueColor,
                     title: 'TerraModis-TrueColor (' + myApp.formatDate(myApp.startDate) + ')',
                     visible: true,
                     opacity: 1,
-                    legendPath: '/static/' + TethysAppName + '/images/rgbLegend.JPG',
+                    legendPath: '/static/' + TethysAppName + '/images/rgbLegend.png',
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -373,280 +277,10 @@ myApp.LayerCollectionObjet = {
                         }
                     },
                     mask: DefaultMaskWMS,
-                    CropOrMask: 'crop'
-                }
-            }, {
-                catalog: 'catalog/HKHAirQualityWatch/RecentAndArchive/PM/GEOS-PM2p5/catalog.xml',
-                useSLD: false,
-                isTimeDimensionLayer: true,
-                getStartDate: function () {
-                    return myApp.formatDate(myApp.startDate) + '-06-30'
-                },
-                getEndDate: function () {
-                    return myApp.formatDate(myApp.startDate) + '-06-30'
-                },
-                VisibleDivBind: false,
-                threddLayerProp: {
-                    id: myApp.constants.recent.layerId.GEOS_PM2p5,
-                    title: 'GEOS PM2.5',
-                    visible: false,
-                    opacity: 1,
-                    ThreddsDataServerVersion: 5,
-                    serverType: 'TDS',
-                    timeSeries: false,
-                    alignTimeSlider: 'left',
-                    timeSliderSize: 'small',
-                    showlegend: false,
-                    showControlPanel: false,
-                    source: {
-                        url: [],
-                        params: {
-                            'LAYERS': 'PM2p5',
-                            'STYLES': 'default-scalar/x-Rainbow',
-                            'COLORSCALERANGE': "0,100",
-                            'transparent': true
-                        }
-                    },
-                    unit: 'µg/m<sup>3<sup>',
-                    mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
-                    filterCoodrdinate: filterCoodrdinate,
-                    aoi: true,
-                    zIndex: 11,
-                    plotInfo: function () {
-                        return Object.assign(DefaultPlotInfo, {
-                            title: 'GEOS $PM_{2.5}$(µg/$m^{3}$)',
-                            LabelTitleTime: ' 6:30 UTC'
-                        })
-                    },
+                    changeWMSProxy: true,
                 }
-            }, {
-                catalog: 'catalog/HKHAirQualityWatch/RecentAndArchive/PM/TerraModis-AOD/catalog.xml',
-                useSLD: false,
-                isTimeDimensionLayer: true,
-                getStartDate: function () {
-                    return myApp.formatDate(myApp.startDate)
-                },
-                getEndDate: function () {
-                    return myApp.formatDate(myApp.startDate)
-                },
-                VisibleDivBind: false,
-                threddLayerProp: {
-                    id: myApp.constants.recent.layerId.TerraModisAOD,
-                    title: 'TerraModis-AOD',
-                    visible: false,
-                    opacity: 1,
-                    ThreddsDataServerVersion: 5,
-                    serverType: 'TDS',
-                    timeSeries: false,
-                    alignTimeSlider: 'left',
-                    timeSliderSize: 'small',
-                    showlegend: false,
-                    showControlPanel: false,
-                    source: {
-                        url: [],
-                        params: {
-                            'LAYERS': 'aod_550',
-                            'STYLES': 'default-scalar/x-Rainbow',
-                            'COLORSCALERANGE': '0.01,1',
-                            'transparent': true
-                        }
-                    },
-                    unit: '',
-                    mask: DefaultMaskWMS,
-                    CropOrMask: 'crop',
-                    filterCoodrdinate: filterCoodrdinate,
-                    aoi: true,
-                    zIndex: 12,
-                    plotInfo: function () {
-                        return Object.assign(DefaultPlotInfo, {
-                            title: 'TerraModis-AOD(550 nm)',
-                            LabelTitleTime: ' 10:30 LST'
-                        })
-                    }
-                }
-            }
-            , {
-                catalog: 'catalog/HKHAirQualityWatch/RecentAndArchive/CO/GEOS-CO/catalog.xml',
-                useSLD: false,
-                isTimeDimensionLayer: true,
-                getStartDate: function () {
-                    return myApp.formatDate(myApp.startDate) + '-06-30'
-                },
-                getEndDate: function () {
-                    return myApp.formatDate(myApp.startDate) + '-06-30'
-                },
-                VisibleDivBind: false,
-                threddLayerProp: {
-                    id: myApp.constants.recent.layerId.CO_GEOS,
-                    title: 'GEOS CO',
-                    visible: false,
-                    opacity: 1,
-                    ThreddsDataServerVersion: 5,
-                    serverType: 'TDS',
-                    timeSeries: false,
-                    alignTimeSlider: 'left',
-                    timeSliderSize: 'small',
-                    showlegend: false,
-                    showControlPanel: false,
-                    source: {
-                        url: [],
-                        params: {
-                            'LAYERS': 'CO',
-                            'STYLES': 'default-scalar/x-Rainbow',
-                            'COLORSCALERANGE': "0,500",
-                            'transparent': true
-                        }
-                    },
-                    unit: 'ppb',
-                    mask: DefaultMaskWMS,
-                    CropOrMask: 'crop',
-                    filterCoodrdinate: filterCoodrdinate,
-                    aoi: true,
-                    zIndex: 13,
-                    plotInfo: function () {
-                        return Object.assign(DefaultPlotInfo, {
-                            title: 'GEOS CO(ppb)',
-                            LabelTitleTime: ' 6:30 UTC'
-                        })
-                    }
-                }
-            }, {
-                catalog: 'catalog/HKHAirQualityWatch/RecentAndArchive/NO2/GEOS-NO2/catalog.xml',
-                useSLD: false,
-                isTimeDimensionLayer: true,
-                getStartDate: function () {
-                    return myApp.formatDate(myApp.startDate) + '-06-30'
-                },
-                getEndDate: function () {
-                    return myApp.formatDate(myApp.startDate) + '-06-30'
-                },
-                VisibleDivBind: false,
-                threddLayerProp: {
-                    id: myApp.constants.recent.layerId.NO2_GEOS,
-                    title: 'GEOS NO2',
-                    visible: false,
-                    opacity: 1,
-                    ThreddsDataServerVersion: 5,
-                    serverType: 'TDS',
-                    timeSeries: false,
-                    alignTimeSlider: 'left',
-                    timeSliderSize: 'small',
-                    showlegend: false,
-                    showControlPanel: false,
-                    source: {
-                        url: [],
-                        params: {
-                            'LAYERS': 'NO2',
-                            'STYLES': 'default-scalar/x-Rainbow',
-                            'COLORSCALERANGE': "0,10",
-                            'transparent': true
-                        }
-                    },
-                    unit: 'ppb',
-                    mask: DefaultMaskWMS,
-                    CropOrMask: 'crop',
-                    filterCoodrdinate: filterCoodrdinate,
-                    aoi: true,
-                    zIndex: 14,
-                    plotInfo: function () {
-                        return Object.assign(DefaultPlotInfo, {
-                            title: 'GEOS $NO_{2}$(ppb)',
-                            LabelTitleTime: ' 6:30 UTC'
-                        })
-                    }
-                }
-            }, {
-                catalog: 'catalog/HKHAirQualityWatch/RecentAndArchive/O3/GEOS-O3/catalog.xml',
-                useSLD: false,
-                isTimeDimensionLayer: true,
-                getStartDate: function () {
-                    return myApp.formatDate(myApp.startDate) + '-06-30'
-                },
-                getEndDate: function () {
-                    return myApp.formatDate(myApp.startDate) + '-06-30'
-                },
-                VisibleDivBind: false,
-                threddLayerProp: {
-                    id: myApp.constants.recent.layerId.O3_GEOS,
-                    title: 'GEOS O3',
-                    visible: false,
-                    opacity: 1,
-                    ThreddsDataServerVersion: 5,
-                    serverType: 'TDS',
-                    timeSeries: false,
-                    alignTimeSlider: 'left',
-                    timeSliderSize: 'small',
-                    showlegend: false,
-                    showControlPanel: false,
-                    source: {
-                        url: [],
-                        params: {
-                            'LAYERS': 'O3',
-                            'STYLES': 'default-scalar/x-Rainbow',
-                            'COLORSCALERANGE': "0,80",
-                            'transparent': true
-                        }
-                    },
-                    unit: 'ppb',
-                    mask: DefaultMaskWMS,
-                    CropOrMask: 'crop',
-                    filterCoodrdinate: filterCoodrdinate,
-                    aoi: true,
-                    zIndex: 15,
-                    plotInfo: function () {
-                        return Object.assign(DefaultPlotInfo, {
-                            title: 'GEOS $O_{3}$(ppb)',
-                            LabelTitleTime: ' 6:30 UTC'
-                        })
-                    }
-                }
-            }, {
-                catalog: 'catalog/HKHAirQualityWatch/RecentAndArchive/SO2/GEOS-SO2/catalog.xml',
-                useSLD: false,
-                isTimeDimensionLayer: true,
-                getStartDate: function () {
-                    return myApp.formatDate(myApp.startDate) + '-06-30'
-                },
-                getEndDate: function () {
-                    return myApp.formatDate(myApp.startDate) + '-06-30'
-                },
-                VisibleDivBind: false,
-                threddLayerProp: {
-                    id: myApp.constants.recent.layerId.SO2_GEOS,
-                    title: 'GEOS SO2',
-                    visible: false,
-                    opacity: 1,
-                    ThreddsDataServerVersion: 5,
-                    serverType: 'TDS',
-                    timeSeries: false,
-                    alignTimeSlider: 'left',
-                    timeSliderSize: 'small',
-                    showlegend: false,
-                    showControlPanel: false,
-                    source: {
-                        url: [],
-                        params: {
-                            'LAYERS': 'SO2',
-                            'STYLES': 'default-scalar/x-Rainbow',
-                            'COLORSCALERANGE': "0,10",
-                            'transparent': true
-                        }
-                    },
-                    unit: 'ppb',
-                    mask: DefaultMaskWMS,
-                    CropOrMask: 'crop',
-                    filterCoodrdinate: filterCoodrdinate,
-                    aoi: true,
-                    zIndex: 16,
-                    plotInfo: function () {
-                        return Object.assign(DefaultPlotInfo, {
-                            title: 'GEOS $SO_{2}$(ppb)',
-                            LabelTitleTime: ' 6:30 UTC'
-                        })
-                    }
-                }
-            }
+            },
         ]
     },
     Archive: {
@@ -711,7 +345,7 @@ myApp.LayerCollectionObjet = {
                     title: 'TerraModis-TrueColor',
                     visible: true,
                     opacity: 1,
-                    legendPath: '/static/' + TethysAppName + '/images/rgbLegend.JPG',
+                    legendPath: '/static/' + TethysAppName + '/images/rgbLegend.png',
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -730,7 +364,8 @@ myApp.LayerCollectionObjet = {
                         }
                     },
                     mask: DefaultMaskWMS,
-                    CropOrMask: 'crop'
+                    CropOrMask: 'crop',
+                    changeWMSProxy: true,
                 }
             }, {
                 catalog: 'catalog/HKHAirQualityWatch/RecentAndArchive/PM/GEOS-PM2p5/catalog.xml',
@@ -747,7 +382,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.archive.layerId.GEOS_PM2p5,
                     title: 'GEOS PM2.5',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -767,6 +402,7 @@ myApp.LayerCollectionObjet = {
                     unit: 'µg/m<sup>3<sup>',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 11,
@@ -796,7 +432,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.archive.layerId.TerraModisAOD,
                     title: 'TerraModis-AOD',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -816,6 +452,7 @@ myApp.LayerCollectionObjet = {
                     unit: '',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 12,
@@ -849,7 +486,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.archive.layerId.O3_TROPOMI,
                     title: 'TROPOMI O3',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -869,6 +506,7 @@ myApp.LayerCollectionObjet = {
                     unit: '',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 13,
@@ -903,7 +541,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.archive.layerId.O3_GEOS,
                     title: 'GEOS O3',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -923,6 +561,7 @@ myApp.LayerCollectionObjet = {
                     unit: 'ppb',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 14,
@@ -952,7 +591,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.archive.layerId.SO2_TROPOMI,
                     title: 'TROPOMI SO2',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -972,6 +611,7 @@ myApp.LayerCollectionObjet = {
                     unit: 'molecules / sq.cm',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 15,
@@ -1006,7 +646,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.archive.layerId.SO2_GEOS,
                     title: 'GEOS SO2',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -1026,6 +666,7 @@ myApp.LayerCollectionObjet = {
                     unit: 'ppb',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 16,
@@ -1054,7 +695,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.archive.layerId.NO2_TROPOMI,
                     title: 'TROPOMI NO2',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -1074,6 +715,7 @@ myApp.LayerCollectionObjet = {
                     unit: 'molecules / sq.cm',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 17,
@@ -1082,13 +724,13 @@ myApp.LayerCollectionObjet = {
                         GetImage: myApp.APICollection.api.GetImage,
                         TimeZone: ' UTC'
                     },
-
                     plotInfo: function () {
                         return Object.assign(DefaultPlotInfo, {
                             title: 'TROPOMI $NO_{2}$($10^{15}$ molecules/$cm^{2}$)',
                             TimeZone: ' UTC'
                         })
-                    }, chartDetail: {
+                    },
+                    chartDetail: {
                         title: 'TROPOMI',
                         unit: "NO<sub>2</sub> (10<sup>15</sup> molecules/cm<sup>2</sup>)",
                         SeriesName: "value"
@@ -1109,7 +751,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.archive.layerId.NO2_GEOS,
                     title: 'GEOS NO2',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -1129,6 +771,7 @@ myApp.LayerCollectionObjet = {
                     unit: 'ppb',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 18,
@@ -1158,7 +801,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.archive.layerId.CO_TROPOMI,
                     title: 'TROPOMI CO',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -1178,6 +821,7 @@ myApp.LayerCollectionObjet = {
                     unit: 'molecules / sq.cm',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 19,
@@ -1212,7 +856,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.archive.layerId.CO_GEOS,
                     title: 'GEOS CO',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -1232,6 +876,7 @@ myApp.LayerCollectionObjet = {
                     unit: 'ppb',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 20,
@@ -1257,7 +902,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.forecast.layerId.GEOS_PM2p5,
                     title: 'GEOS PM2.5',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -1277,6 +922,7 @@ myApp.LayerCollectionObjet = {
                     unit: 'µg/m<sup>3<sup>',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 20,
@@ -1299,7 +945,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.forecast.layerId.CO_GEOS,
                     title: 'GEOS CO',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -1319,6 +965,7 @@ myApp.LayerCollectionObjet = {
                     unit: '',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 21,
@@ -1342,7 +989,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.forecast.layerId.NO2_GEOS,
                     title: 'GEOS NO2',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -1362,6 +1009,7 @@ myApp.LayerCollectionObjet = {
                     unit: '',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 22,
@@ -1384,7 +1032,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.forecast.layerId.O3_GEOS,
                     title: 'GEOS O3',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -1404,6 +1052,7 @@ myApp.LayerCollectionObjet = {
                     unit: '',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 23,
@@ -1426,7 +1075,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.forecast.layerId.SO2_GEOS,
                     title: 'GEOS SO2',
                     visible: false,
-                    opacity: 1,
+                    opacity: 0.6,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -1446,6 +1095,7 @@ myApp.LayerCollectionObjet = {
                     unit: '',
                     mask: DefaultMaskWMS,
                     CropOrMask: 'crop',
+                    changeWMSProxy: true,
                     filterCoodrdinate: filterCoodrdinate,
                     aoi: true,
                     zIndex: 24,
@@ -1464,6 +1114,11 @@ myApp.LayerCollectionObjet = {
     }
 };
 
+myApp.DefaultSations = {
+    aeronetAOD: [2, 5, 13, 6],
+    pm2p5Embassy: [6, 4, 2, 8],
+    o3Embassy: [6, 4, 7, 8]
+}
 
 myApp.cascaderObject = {
     Recent: {
@@ -1483,6 +1138,7 @@ myApp.cascaderObject = {
                         ModelClass: 'AeronetAod',
                         ModelClassDataList: 'AeronetDataList',
                         typeName: 'aod',
+                        defaultStation: myApp.DefaultSations.aeronetAOD,
                         chart: {
                             title: function (stationName, sd) {
                                 return 'AERONET AOD at ' + stationName + ' (' + sd + ')';
@@ -1506,6 +1162,7 @@ myApp.cascaderObject = {
                         ModelClass: 'UsEmbassyPm',
                         ModelClassDataList: 'UsEmbassyDataList',
                         typeName: 'pm',
+                        defaultStation: myApp.DefaultSations.pm2p5Embassy,
                         chart: {
                             title: function (stationName, sd) {
                                 return stationName + ' (' + sd + ')'
@@ -1518,26 +1175,11 @@ myApp.cascaderObject = {
                             }
                         }
                     },
-                    {
-                        label: 'Model-PM2.5 (GEOS)',
-                        layerId: myApp.constants.recent.layerId.GEOS_PM2p5,
-                        value: 13,
-                    },
-                    {
-                        label: 'Satellite-AOD(Terra-MODIS)',
-                        layerId: myApp.constants.recent.layerId.TerraModisAOD,
-                        value: 14,
-                    }
                 ]
             }, {
                 label: 'O3',
                 value: 2,
                 children: [
-                    {
-                        label: 'Model-O3 (GEOS)',
-                        layerId: myApp.constants.recent.layerId.O3_GEOS,
-                        value: 22,
-                    },
                     {
                         label: 'Surface Observation-O3',
                         layerId: myApp.constants.recent.layerId.O3_usembassy,
@@ -1548,6 +1190,7 @@ myApp.cascaderObject = {
                         ModelClass: 'UsEmbassyPm',
                         ModelClassDataList: 'UsEmbassyDataList',
                         typeName: 'O3',
+                        defaultStation: myApp.DefaultSations.o3Embassy,
                         chart: {
                             title: function (stationName, sd) {
                                 return stationName + ' (' + sd + ')'
@@ -1560,39 +1203,6 @@ myApp.cascaderObject = {
                             }
                         }
                     },
-                ]
-            },
-            {
-                label: 'SO2',
-                value: 3,
-                children: [
-                    {
-                        label: 'Model-SO2 (GEOS)',
-                        layerId: myApp.constants.recent.layerId.SO2_GEOS,
-                        value: 32,
-                    }
-                ]
-            },
-            {
-                label: 'NO2',
-                value: 4,
-                children: [
-                    {
-                        label: 'Model-NO2 (GEOS)',
-                        layerId: myApp.constants.recent.layerId.NO2_GEOS,
-                        value: 42,
-                    }
-                ]
-            },
-            {
-                label: 'CO',
-                value: 5,
-                children: [
-                    {
-                        label: 'Model-CO (GEOS)',
-                        layerId: myApp.constants.recent.layerId.CO_GEOS,
-                        value: 52,
-                    }
                 ]
             }]
     },
@@ -1612,6 +1222,7 @@ myApp.cascaderObject = {
                         ModelClass: 'AeronetAod',
                         ModelClassDataList: 'AeronetDataList',
                         typeName: 'aod',
+                        defaultStation: myApp.DefaultSations.aeronetAOD,
                         chart: {
                             title: function (stationName, sd, ed) {
                                 return `${stationName} (${sd} - ${ed})`
@@ -1636,6 +1247,7 @@ myApp.cascaderObject = {
                         ModelClass: 'UsEmbassyPm',
                         ModelClassDataList: 'UsEmbassyDataList',
                         typeName: 'pm',
+                        defaultStation: myApp.DefaultSations.pm2p5Embassy,
                         chart: {
                             title: function (stationName, sd, ed) {
                                 return `${stationName} (${sd} - ${ed})`
@@ -1682,6 +1294,7 @@ myApp.cascaderObject = {
                         ModelClass: 'UsEmbassyPm',
                         ModelClassDataList: 'UsEmbassyDataList',
                         typeName: 'O3',
+                        defaultStation: myApp.DefaultSations.o3Embassy,
                         chart: {
                             title: function (stationName, sd, ed) {
                                 return `${stationName} (${sd} - ${ed})`
@@ -1871,7 +1484,336 @@ myApp.getForecastWMSList = async function (url) {
         }
     }
     return wmsList.sort()
+};
+
+myApp.datetimePointChartObj = function (title, subTitle, SeriesData, SeriesName, YaxisLabel, XaxisLabel, plotColor, DataPeriod) {
+    let data = {
+            chart: {
+                marginLeft: 65,
+                /* marginRight: 0, */
+                /* spacingLeft: 0, */
+                /* spacingRight: 0 */
+                backgroundColor: 'transparent',
+                plotBorderColor: '#afafaf',
+                plotBorderWidth: 1,
+            },
+            title: {
+                text: title,
+                fontSize: '10px',
+                useHTML: true
+            },
+            subtitle: {
+                text: subTitle,
+                fontSize: '8px'
+            },
+            series: [{
+                name: SeriesName,
+                data: SeriesData,
+                lineWidth: 0,
+                marker: {
+                    enabled: true,
+                    symbol: 'diamond',
+                    radius: 2
+                },
+            }],
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: XaxisLabel,
+                    align: 'high',
+                },
+                tickLength: 0,
+                lineColor: 0,
+                lineWidth: 0
+            },
+            yAxis: {
+                title: {
+                    text: `<span style="display:inline-block; -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -ms-transform: rotate(270deg); -o-transform: rotate(270deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);">${YaxisLabel}</span>`,
+                    useHTML: true,
+                    rotation: 0,
+                    // align: 'high',
+                    offset: 0,
+                    x: -50
+                },
+                tickLength: 0,
+                lineColor: 0,
+                lineWidth: 0,
+                gridLineWidth: 0
+            },
+            legend: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    color: plotColor
+                }
+            },
+            lang: {
+                noData: DataPeriod + 'data not available for this station.'
+            },
+            exporting: {
+                buttons: {
+                    contextButton: {
+                        menuItems: ["printChart",
+                            "separator",
+                            "downloadPNG",
+                            "downloadJPEG",
+                            "downloadPDF",
+                            "downloadSVG",
+                            "separator",
+                            "downloadCSV",
+                            "downloadXLS",
+                            //"viewData",
+                            "openInCloud"]
+                    }
+                },
+                // chartOptions: {
+                //     title: {
+                //         text: title,
+                //         fontSize: '10px',
+                //         useHTML: true
+                //     }, yAxis: {
+                //         title: {
+                //             text: `<span style="display:inline-block; -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);">${YaxisLabel}</span>`,
+                //             useHTML: true,
+                //             rotation: 250
+                //         }
+                //     },
+                // },
+                allowHTML: true,
+                // fallbackToExportServer: false,
+                // libURL: 'http://localhost:8000/static/airqualitywatch/js/Highcharts/lib/'
+            }
+        }
+    ;
+    return data
+};
+
+myApp.datetimeChartObj = function (title, subTitle, SeriesData, SeriesName, YaxisLabel, XaxisLabel, plotColor, DataPeriod) {
+    let data = {
+        chart: {
+            marginLeft: 65,
+            /* marginRight: 0, */
+            /* spacingLeft: 0, */
+            /* spacingRight: 0 */
+            backgroundColor: 'transparent',
+            plotBorderColor: '#afafaf',
+            plotBorderWidth: 1,
+        },
+        title: {
+            text: title,
+            fontSize: '10px',
+            useHTML: true
+        },
+        subtitle: {
+            text: subTitle,
+            fontSize: '8px'
+        },
+        series: [{
+            name: SeriesName,
+            data: SeriesData,
+            // marker: {
+            //     enabled: true,
+            //     symbol: 'diamond',
+            //     radius: 3
+            // },
+        }],
+        xAxis: {
+            type: 'datetime',
+            title: {
+                text: XaxisLabel,
+                align: 'high',
+            },
+            tickLength: 0,
+            lineColor: 0,
+            lineWidth: 0
+        },
+        lang: {
+            noData: DataPeriod + 'data not available for this station.'
+        },
+        yAxis: {
+            title: {
+                text: `<span style="display:inline-block; -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -ms-transform: rotate(270deg); -o-transform: rotate(270deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);">${YaxisLabel}</span>`,
+                useHTML: true,
+                rotation: 0,
+                // align: 'high',
+                offset: 0,
+                x: -50
+            },
+            tickLength: 0,
+            lineColor: 0,
+            lineWidth: 0,
+            gridLineWidth: 0
+        },
+        legend: {
+            enabled: false
+        },
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                color: plotColor
+            }
+        },
+        exporting: {
+            buttons: {
+                contextButton: {
+                    menuItems: ["printChart",
+                        "separator",
+                        "downloadPNG",
+                        "downloadJPEG",
+                        "downloadPDF",
+                        "downloadSVG",
+                        "separator",
+                        "downloadCSV",
+                        "downloadXLS",
+                        //"viewData",
+                        "openInCloud"]
+                }
+            },
+            // chartOptions: {
+            //     title: {
+            //         text: title,
+            //         fontSize: '10px',
+            //         useHTML: true
+            //     }, yAxis: {
+            //         title: {
+            //             text: `<span style="display:inline-block; -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);">${YaxisLabel}</span>`,
+            //             useHTML: true,
+            //             rotation: 250
+            //         }
+            //     },
+            // },
+            allowHTML: true,
+            // fallbackToExportServer: false,
+            // libURL: 'http://localhost:8000/static/airqualitywatch/js/Highcharts/lib/'
+        }
+    };
+    return data
+};
+
+myApp.forceDownload = function (url, fileName) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.responseType = "blob";
+    xhr.onload = function () {
+        var urlCreator = window.URL || window.webkitURL;
+        var imageUrl = urlCreator.createObjectURL(this.response);
+        var tag = document.createElement('a');
+        tag.href = imageUrl;
+        tag.download = fileName;
+        document.body.appendChild(tag);
+        tag.click();
+        document.body.removeChild(tag);
+    }
+    xhr.send();
 }
 
-export var AirPollutionWatchApp = myApp;
+// myApp.datetimeChartObj = function (title, subTitle, SeriesData, SeriesName, YaxisLabel, XaxisLabel, plotColor) {
+//     let data = {
+//             chart: {
+//                 marginLeft: 65,
+//                 /* marginRight: 0, */
+//                 /* spacingLeft: 0, */
+//                 /* spacingRight: 0 */
+//                 backgroundColor: 'transparent',
+//                 plotBorderColor: '#afafaf',
+//                 plotBorderWidth: 1,
+//             },
+//             title: {
+//                 text: title,
+//                 fontSize: '10px',
+//                 useHTML: true
+//             },
+//             subtitle: {
+//                 text: subTitle,
+//                 fontSize: '8px'
+//             },
+//             series: [{
+//                 name: SeriesName,
+//                 data: SeriesData,
+//                 // marker: {
+//                 //     enabled: true,
+//                 //     symbol: 'diamond',
+//                 //     radius: 3
+//                 // },
+//             }],
+//             xAxis: {
+//                 type: 'datetime',
+//                 title: {
+//                     text: XaxisLabel,
+//                     align: 'high',
+//                 },
+//                 tickLength: 0,
+//                 lineColor: 0,
+//                 lineWidth: 0
+//             },
+//             yAxis: {
+//                 title: {
+//                     text: `<span style="display:inline-block; -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -ms-transform: rotate(270deg); -o-transform: rotate(270deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);">${YaxisLabel}</span>`,
+//                     useHTML: true,
+//                     rotation: 0,
+//                     // align: 'high',
+//                     offset: 0,
+//                     x: -50
+//                 },
+//                 tickLength: 0,
+//                 lineColor: 0,
+//                 lineWidth: 0,
+//                 gridLineWidth: 0
+//             },
+//             legend: {
+//                 enabled: false
+//             },
+//             credits: {
+//                 enabled: false
+//             },
+//             plotOptions: {
+//                 series: {
+//                     color: plotColor
+//                 }
+//             },
+//             exporting: {
+//                 buttons: {
+//                     contextButton: {
+//                         menuItems: ["printChart",
+//                             "separator",
+//                             "downloadPNG",
+//                             "downloadJPEG",
+//                             "downloadPDF",
+//                             "downloadSVG",
+//                             "separator",
+//                             "downloadCSV",
+//                             "downloadXLS",
+//                             //"viewData",
+//                             "openInCloud"]
+//                     }
+//                 },
+//                 // chartOptions: {
+//                 //     title: {
+//                 //         text: title,
+//                 //         fontSize: '10px',
+//                 //         useHTML: true
+//                 //     }, yAxis: {
+//                 //         title: {
+//                 //             text: `<span style="display:inline-block; -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);">${YaxisLabel}</span>`,
+//                 //             useHTML: true,
+//                 //             rotation: 250
+//                 //         }
+//                 //     },
+//                 // },
+//                 allowHTML: true,
+//                 // fallbackToExportServer: false,
+//                 // libURL: 'http://localhost:8000/static/airqualitywatch/js/Highcharts/lib/'
+//             }
+//         }
+//     ;
+//     console.log(JSON.stringify(data));
+//     return data
+// };
 
+export var AirPollutionWatchApp = myApp;

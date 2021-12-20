@@ -1,7 +1,7 @@
 # from t
-from tethysapp.aqwatchapi.app import Aqwatchapi
+from tethysapp.airquality.app import Airquality
 
-TethysAppName = Aqwatchapi.package
+TethysAppName = Airquality.package
 initilizationData = {
     'country': 'Bhutan',
     'navLogoImage': '/static/' + TethysAppName + '/images/nologo.png',
@@ -18,7 +18,6 @@ initilizationData = {
 }
 
 DataDirLocation = '/home/suman/ThreddsDataServerDataset/AirQualityData'
-
 
 
 DBUser = 'suman'

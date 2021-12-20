@@ -45,6 +45,14 @@ class Airquality(TethysAppBase):
                 url='airquality/getData',
                 controller='airquality.controllers.viewer.GetData',
             ),
+            UrlMap(name='WMSProxy',
+                   url='airquality/WMSProxy/(?P<url>.*)',
+                   # url='airquality/WMSProxy/',
+                   # url=r'airquality/WMSProxy/(?P<variable_name>.*)$',
+                   # regex=r'^[ A-Za-z0-9_@./#&+-]*$',
+                   controller='airquality.controllers.viewer.WMSProxy',
+                   # regex='variable_name'
+                   ),
             UrlMap(
                 name='GeojsonRegion',
                 url='airquality/geojsonregion',

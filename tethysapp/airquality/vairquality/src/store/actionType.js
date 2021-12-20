@@ -7,7 +7,9 @@ if (process.env.NODE_ENV === "production") {
     // BaseUrl = "http://localhost:8000";
 
     BaseUrl = 'http://smog.icimod.org';
+
 } else {
+
     BaseUrl = "http://localhost:8000";
 }
 
@@ -24,12 +26,13 @@ export let Action = {
     getAllStationsID: 'apps/airquality/getAllStationsID',
 
 
-    commonAPI: 'apps/airquality/getData',
+    commonAPI: 'apps/airquality/getData/',
     RegionGeojson: 'apps/airquality/geojsonregion',
     AOIPolygon: 'apps/airquality/aoipolygon',
-    GetMapImage: 'apps/airquality/getmapimage',
+    GetMapImage: 'apps/airquality/getmapimage/',
     GetImage: 'apps/airquality/downloadImage',
     SlicedFromCatalog: 'apps/airquality/slicedfromcatalog/',
+    TimeSeriesRasterQuery: 'apps/airquality/timeseriesmodeldata/',
 
 
 };

@@ -7,13 +7,34 @@
       </el-button>
     </div>
     <div class="body-container">
-      <p style="text-align:justify;font-size:12px;">
-        ICIMOD is developing an integrated information platform linking weather and climate datawith agriculture
-        practices in the region. The platform provides data analysis support toprofessionals responsible for developing
-        agro-met advisories for government agencies and ...
-      </p>
-      <el-button type="text" @click="centerDialogVisible = true">View More ..</el-button>
+      <el-scrollbar height="100%">
+        <p style="text-align:justify;font-size:12px;">
+          ICIMOD is a regional intergovernmental learning and knowledge-sharing centre serving the eight regional member
+          countries of the Hindu Kush Himalaya (HKH) – Afghanistan, Bangladesh, Bhutan, China, India, Myanmar, Nepal,
+          and
+          Pakistan. Working in partnership with regional and international organizations, ICIMOD aims to influence
+          policy
+          and practices to meet environmental and livelihood challenges emerging in the HKH. ICIMOD provides a platform
+          for researchers, practitioners, and policy makers from the region and around the globe to generate and share
+          knowledge, support evidence-based decision making, and encourage regional cooperation.
+
+        </p>
+        <p style="text-align:justify;font-size:12px;">
+          ICIMOD works through its six regional programmes: 1) Adaptation and Resilience Building, 2) Transboundary
+          Landscapes, 3) River Basins and Cryosphere, 4) Atmosphere, 5) Mountain Environment Regional Information
+          System,
+          and 6) Mountain Knowledge and Action Networks. These regional programmes are supported by four thematic areas
+          –
+          Livelihoods, Ecosystem Services, Water and Air, and Geospatial Solutions – and underpinned by the Knowledge
+          Management and Communication (KMC) Unit. The Regional Atmosphere Programme involves in identifying, testing,
+          and
+          piloting mitigation solutions; building capacity and outreach; fostering regional collaboration and building
+          cross-border networks; and contributing to policy at local, national, regional, and global levels.
+        </p>
+        <el-button type="text" @click="centerDialogVisible = true">View More ..</el-button>
+      </el-scrollbar>
     </div>
+
     <el-dialog
         title="Air Quality Information System"
         v-model="centerDialogVisible"
@@ -21,9 +42,9 @@
         center>
       <span><div class="contributor" style="text-align: center;">
 <!--                    <img src="@/assets/USAIDlogo.png" style="height:50px;">-->
-<!--                    <img src="@/assets/NASA_LOGO.png" style="height:50px;">-->
+        <!--                    <img src="@/assets/NASA_LOGO.png" style="height:50px;">-->
                     <img src="@/assets/ICIMOD_Master_logo_Blue.png" style="height: 50px;position: relative;top: 5px;">
-<!--                    <img src="@/assets/Servir_HKH_green.png" style="height: 30px;position: relative;top: -4px;">-->
+        <!--                    <img src="@/assets/Servir_HKH_green.png" style="height: 30px;position: relative;top: -4px;">-->
                 </div>
 <div>
                             <p style="text-align:justify">

@@ -29,6 +29,19 @@ def getGeoJSONofStations(request):
     data=getGeoJSONStations(ModelClass)
     return JsonResponse(data)
 
+import urllib.request
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def WMSProxy(request,url):
+    completeURL = str(request.build_absolute_uri())
+    url=completeURL.split('/apps/airquality/WMSProxy/')[-1]
+    url=url.replace('/wms/?Service','/wms?Service').replace('.ncml/?FORMAT','.ncml?FORMAT').replace('.ncml/?SERVICE','.ncml?SERVICE')
+    request1 = urllib.request.Request(url)
+    response = urllib.request.urlopen(request1).read()
+    return HttpResponse(response ,content_type="image/png")
+
 
 @api_view(['GET'])
 @authentication_classes([])
@@ -59,12 +72,15 @@ def getGeoJsonForOneSatation(request):
 #
 #     return JsonResponse(allinformations)
 
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
 def GetData(request):
     """
     Controller for the app home page.
     """
-    param = ast.literal_eval(request.GET.get('param'))
-    allinformations = GetCommonRequestData(param)
+
+    allinformations = GetCommonRequestData(request.data)
 
     return JsonResponse(allinformations)
 
@@ -165,20 +181,23 @@ def AOIPolygon(request):
     nc_fid.close()
     return JsonResponse(alldata)
 
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
 def GetMapIMAGE(request):
-    wmsList = ast.literal_eval(request.POST.get('wmsList'))
-    LAYER = ast.literal_eval(request.POST.get('LAYER'))
-    TIME = ast.literal_eval(request.POST.get('TIME'))
-    BBOX = ast.literal_eval(request.POST.get('BBOX'))
-    COLORSCALERANGE = ast.literal_eval(request.POST.get('COLORSCALERANGE'))
-    Resolution = int(request.POST.get('Resolution'))
-    colorScheme = ast.literal_eval(request.POST.get('colorScheme'))
-    labelName = ast.literal_eval(request.POST.get('labelName'))
-    title = ast.literal_eval(request.POST.get('title'))
-    tickSpan = float(request.POST.get('tickSpan'))
-    width = float(ast.literal_eval(request.POST.get('width')))
-    height = float(ast.literal_eval(request.POST.get('height')))
-    rid = int(request.POST.get('rid'))
+    wmsList = request.data.get('wmsList')
+    LAYER = request.data.get('LAYER')
+    TIME = request.data.get('TIME')
+    BBOX = request.data.get('BBOX')
+    COLORSCALERANGE = request.data.get('COLORSCALERANGE')
+    Resolution = int(request.data.get('Resolution'))
+    colorScheme = request.data.get('colorScheme')
+    labelName = request.data.get('labelName')
+    title = request.data.get('title')
+    tickSpan = float(request.data.get('tickSpan'))
+    width = float(request.data.get('width'))
+    height = float(request.data.get('height'))
+    rid = int(request.data.get('rid'))
     fileList=[]
     for i in wmsList:
         fileFullPath=os.path.join(DataDirLocation,i.split('/wms/')[-1])
@@ -201,6 +220,9 @@ def GetMapIMAGE(request):
 
 from django.http import FileResponse
 
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
 def downloadImage(request):
     imageName = request.GET.get('ImageName')
     gif = request.GET.get('gif')
@@ -250,11 +272,14 @@ def Create_GIF_Map_IMAGE(request):
     alldata = {"image": outputFile}
     return JsonResponse(alldata)
 
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
 def TimeSeriesModelSata(request):
-    DataDir = ast.literal_eval(request.POST.get('DATADIR'))
-    LAYER = ast.literal_eval(request.POST.get('LAYER'))
-    wkt = ast.literal_eval(request.POST.get('wkt'))
-    WKTType = ast.literal_eval(request.POST.get('type'))
+    DataDir = request.data.get('DATADIR')
+    LAYER = request.data.get('LAYER')
+    wkt = request.data.get('wkt')
+    WKTType = request.data.get('type')
     # ncFile = DataDirLocation + str(DataDir)
     # collectionDir = None
     # if '.ncml' in ncFile:
@@ -266,7 +291,7 @@ def TimeSeriesModelSata(request):
         collectionDir.append(di)
 
     Data = TimeSeriesModelDataCompute(collectionDir, LAYER, wkt,WKTType)
-    if WKTType == 'polygon':
+    if WKTType == 'Polygon':
         P = shapely.wkt.loads(wkt)
         bounds = P.bounds
         miny = float(bounds[1])

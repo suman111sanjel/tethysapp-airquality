@@ -13,12 +13,15 @@
         v-model="drawer"
         custom-class="drawerCustomCSS"
         :append-to-body="drawerAppendToBody"
+        :modal="false"
+        :modal-class="'drawerForLayersList'"
     >
       <span>
         <div class="layerCollection"></div>
           </span>
     </el-drawer>
 
+    <PrintMap></PrintMap>
   </div>
 </template>
 
@@ -40,11 +43,9 @@ import eventHub from "../utils/utils";
 import {getArea, getLength,} from 'ol/sphere';
 import LineString from 'ol/geom/LineString';
 
-
 // import {MajorBasinExtent, BasinExtent, mbasin, dataSelect, WMSSLD, legendImage} from "../utils/data";
 // import TimeDimensionTile from "ol-plus/layer/TimeDimensionTile";
 // import {ThreddsServer} from "../utils/config";
-
 
 
 import 'ol-ext/control/Search.css';
@@ -61,11 +62,6 @@ import {getCenter as ol_extent_getCenter} from 'ol/extent';
 import GeoJSON from "ol/format/GeoJSON";
 
 
-import '@fortawesome/fontawesome-free/js/brands';
-import '@fortawesome/fontawesome-free/js/solid';
-import '@fortawesome/fontawesome-free/js/fontawesome';
-
-
 import OLPolygon from 'ol/geom/Polygon'
 import OlSelect from 'ol/interaction/Select'
 import OlDraw from 'ol/interaction/Draw'
@@ -75,12 +71,16 @@ import OlExtButton from 'ol-ext/control/Button'
 import OlExtToggle from 'ol-ext/control/Toggle';
 import 'ol-ext/control/Bar.css'
 import CircleStyle from "ol/style/Circle";
+import ScaleLine from "ol/control/ScaleLine";
+import {defaults} from "ol/control";
+
 import {mapMutations, mapState} from 'vuex';
 
+import PrintMap from "./PrintMap";
 
 export default {
   name: "mapComponentEmission",
-  components: {},
+  components: {PrintMap},
   data() {
     return {
       drawerAppendToBody: true,
@@ -95,20 +95,27 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["setSelectedLayerObj", "appendTimeSeriesLayerCollection", "setSelectInteraction","setMapObject"]),
+    ...mapMutations(["setSelectedLayerObj", "appendTimeSeriesLayerCollection", "setSelectInteraction", "setMapObject", "setWorkingVectorLayer"]),
     mapInitilization() {
       let osm = new TileLayer({
         source: new OSM({attributions: [],}),
+        // visible:false
       });
       let view = new View({
         center: [9388155.512006583, 3291367.8109067543],
         zoom: 4,
-        extent: [5616595.125720361, 1593202.319234529, 12553578.902011594, 4692971.646297999]
+        extent: [6702855.884774126, 1769255.1930753174, 12194542.852403797, 4812621.833531793]
       });
+      let ScaleControl = new ScaleLine({
+            units: 'metric'
+        });
       var map = new Map({
         layers: [],
         // target: this.$refs['map-root'],
         target: 'map-container2',
+        controls:defaults({
+           attribution: false
+        }).extend([ScaleControl]),
         view: view,
       });
       map.addLayer(osm);
@@ -120,14 +127,13 @@ export default {
             element: document.getElementById('layerSwitcherDiv')
           })
       );
-      map.getView().fit([5616595.125720361, 1593202.319234529, 12553578.902011594, 4692971.646297999], map.getView());
+      map.getView().fit([6702855.884774126, 1769255.1930753174, 12194542.852403797, 4812621.833531793], map.getView());
       this.setMapObject(this.mapObject);
     },
     changeInventory() {
       this.addTimeDimensionLayer();
     },
     async addTimeDimensionLayer() {
-
 
 
       // var mapObject = this.mapObject;
@@ -185,7 +191,6 @@ export default {
       //         console.error(error);
       //       });
       // }
-
     },
     addGeoCodingAndInteractionBar() {
       var map = this.mapObject;
@@ -205,13 +210,15 @@ export default {
         source: new VectorSource(),
         zIndex: 999
       });
+      this.setWorkingVectorLayer(GeoCodingAndDrawLayer);
       map.addLayer(GeoCodingAndDrawLayer);
 
       map.addControl(search);
 
 
 // Select feature when click on the reference index
-      search.on('select', function (e) {	// console.log(e);
+      search.on('select', function (e) {
+        // console.log(e);
         // GeoCodingAndDrawLayer.getSource().clear();
         removePreviousSearchFeature();
         // Check if we get a geojson to describe the search
@@ -276,7 +283,7 @@ export default {
             GeoCodingAndDrawLayer.getSource().removeFeature(f);
           });
           selectCtrl.getInteraction().getFeatures().clear();
-          selectCtrl.getInteraction().dispatchEvent({ type: 'select'});
+          selectCtrl.getInteraction().dispatchEvent({type: 'select'});
         }
       }));
 
@@ -310,7 +317,8 @@ export default {
             //,fill: new ol.style.Stroke ({
             //  color: [155, 155, 155, 0.4]
             //})
-          })
+          }),
+          layers: [GeoCodingAndDrawLayer]
         }),
         bar: sbar,
         autoActivate: true,
@@ -405,7 +413,6 @@ export default {
         // document.querySelector("#info").innerHTML(i || "");
       }
 
-
       function UpDateVectorLayerStyle() {
         GeoCodingAndDrawLayer.getSource().forEachFeature(function (feature) {
           let StyleObj = null;
@@ -490,7 +497,25 @@ export default {
         // console.log(features);
       }
 
-
+      console.log("second");
+      eventHub.$emit('runFeatureInteractionCode');
+    },
+    addPrintMapFunctionality() {
+      // Add a custom push button with onToggle function
+      let that = this;
+      var PrintButton = new OlExtButton(
+          {
+            html: '<i class="fas fa-print"></i>',
+            className: "PrintMap",
+            title: "Print map",
+            handleClick: () => {
+              that.PrintMapComponentData.PrintMapDialogVisible = true;
+              setTimeout(() => {
+                eventHub.$emit('OpenDialogOfPrintAndProxyfy');
+              }, 500);
+            }
+          });
+      this.mapObject.addControl(PrintButton);
     },
     LayerSwitcherClick() {
       this.drawer = true;
@@ -504,10 +529,10 @@ export default {
       //     })
       //     .catch(()=> {
       //     });
-    },
+    }
   },
   computed: {
-    ...mapState(["TimeSeriesLayerCollection"]),
+    ...mapState(["TimeSeriesLayerCollection", "PrintMapComponentData"]),
     getInventory() {
       return dataSelect.Inventory;
     },
@@ -516,12 +541,12 @@ export default {
     this.Inventory = this.$store.state.inventory;
   },
   beforeMount() {
-
   },
   mounted() {
     this.mapInitilization();
     // this.addGeoCoding();
     this.addGeoCodingAndInteractionBar();
+    // this.addPrintMapFunctionality();
     eventHub.$on('InventoryChange', () => {
       this.changeInventory();
     });
@@ -552,19 +577,9 @@ export default {
   border-radius: 1px;
 }
 
-.el-overlay {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 2000;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0);
-}
 
-.el-drawer.drawerCustomCSS {
-
+.drawerForLayersList {
+  position: initial !important;
 }
 
 /* OSM Based Geocoding*/
@@ -626,4 +641,16 @@ export default {
   transform: none;
 }
 
+.PrintMap.ol-button.ol-unselectable.ol-control {
+  top: 12em;
+  left: 0.5em;
+}
+
+.LayerDiv {
+  margin-top: 20px;
+}
+
+.withOpacityChange {
+  margin-bottom: 18px;
+}
 </style>
