@@ -1,7 +1,8 @@
 # from t
-from tethysapp.airquality.app import Airquality
+from tethysapp.airqualitynp.app import Airqualitynp
+TethysAppName = Airqualitynp.package
 
-TethysAppName = Airquality.package
+
 initilizationData = {
     'country': 'Bhutan',
     'navLogoImage': '/static/' + TethysAppName + '/images/nologo.png',
@@ -17,15 +18,32 @@ initilizationData = {
     'regionOrCountryId': 7
 }
 
-DataDirLocation = '/home/suman/ThreddsDataServerDataset/AirQualityData'
+
+# localhost
+DataDirLocation = '/home/suman/ThreddsDataServerDataset/AQWatchAllData/cron_AirQuality_Data'
 
 
-DBUser = 'suman'
-DBPassword = 'suman123##.'
-DBhost = '192.168.10.211'
-DBport = '5432'
-DatabaseName = 'airqualitywatch_airqualitywatch'
+# Server
+# DataDirLocation = '/smogdata01/cron_AirQuality_Data'
+
+
+# Emisssion localhost
+DataDir='/home/suman/ThreddsDataServerDataset/AQWatchAllData'
+
+
+# Emisssion server
+# DataDir='/smogdata01'
+
+
+DBUser =        'suman'
+DBPassword =    'suman123##.'
+DBhost =        '192.168.10.211'
+# DBhost =      'localhost'
+DBport =        '5432'
+DatabaseName =  'airqualitywatch_airqualitywatch'
 DataBaseConnectionStrURL = "postgresql://" + DBUser + ":" + DBPassword + "@" + DBhost + ":" + DBport + "/" + DatabaseName
+
+
 
 # DBUser = 'icimod'
 # DBPassword = '1cim0d'

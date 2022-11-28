@@ -37,6 +37,16 @@ class MajorCity(Base):
     cities = Column(String(50))
     geom = Column(Geometry('POINT', 4326), index=True)
 
+
+class NepalCity(Base):
+    __tablename__ = 'nepal_cities'
+    __table_args__ = {'schema': 'public'}
+
+    gid = Column(Integer, primary_key=True, server_default=text("nextval('\"public\".nepal_cities_gid_seq'::regclass)"))
+    id = Column(Integer)
+    cities = Column(String(50))
+    geom = Column(Geometry('POINT', 4326), index=True)
+
 class ApwatchLayergroupone(Base):
     __tablename__ = 'apwatch_layergroupone'
     __table_args__ = {'schema': 'public'}
@@ -153,3 +163,29 @@ class MapImage(Base):
     id = Column(BigInteger, primary_key=True, server_default=text("nextval('\"public\".map_image_id_seq'::regclass)"))
     image_filename = Column(String)
     fps = Column(Float(53))
+
+class ObservationStationsNepal(Base):
+    __tablename__ = 'observation_stations_nepal'
+    __table_args__ = {'schema': 'nepal'}
+
+    st_id = Column(Integer, primary_key=True)
+    site = Column(String)
+    geom = Column(Geometry)
+    name = Column(String)
+    folder_name = Column(String)
+    country_id = Column(Integer)
+    is_utc = Column(Boolean)
+    delta_hour = Column(Integer)
+    delta_min = Column(Integer)
+    description = Column(String)
+    longitude = Column(Float(53))
+    latitude = Column(Float(53))
+
+class ObservationStationsNepalDataList(Base):
+    __tablename__ = 'observation_stations_nepal_data_list'
+    __table_args__ = {'schema': 'nepal'}
+
+    st_id = Column(Integer, primary_key=True, nullable=False)
+    date_time = Column(DateTime, primary_key=True, nullable=False)
+    value = Column(Float(53))
+    type = Column(String, primary_key=True, nullable=False)

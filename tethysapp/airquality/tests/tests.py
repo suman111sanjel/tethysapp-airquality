@@ -4,7 +4,7 @@ from tethys_sdk.testing import TethysTestCase
 # Use if your app has persistent stores that will be tested against.
 # Your app class from app.py must be passed as an argument to the TethysTestCase functions to both
 # create and destroy the temporary persistent stores for your app used during testing
-# from ..app import Airquality
+# from ..app import Airqualitynp
 
 # Use if you'd like a simplified way to test rendered HTML templates.
 # You likely need to install BeautifulSoup, as it is not included by default in Tethys Platform
@@ -33,16 +33,16 @@ To run any tests:
        See below for specific examples
 
         To run all tests across this app:
-            Test command: "tethys test -f tethys_apps.tethysapp.airquality"
+            Test command: "tethys test -f tethys_apps.tethysapp.airqualitynp"
 
         To run all tests in this file:
-            Test command: "tethys test -f tethys_apps.tethysapp.airquality.tests.tests"
+            Test command: "tethys test -f tethys_apps.tethysapp.airqualitynp.tests.tests"
 
-        To run tests in the AirqualityTestCase class:
-            Test command: "tethys test -f tethys_apps.tethysapp.airquality.tests.tests.AirqualityTestCase"
+        To run tests in the AirqualitynpTestCase class:
+            Test command: "tethys test -f tethys_apps.tethysapp.airqualitynp.tests.tests.AirqualitynpTestCase"
 
-        To run only the test_if_tethys_platform_is_great function in the AirqualityTestCase class:
-            Test command: "tethys test -f tethys_apps.tethysapp.airquality.tests.tests.AirqualityTestCase.test_if_tethys_platform_is_great"
+        To run only the test_if_tethys_platform_is_great function in the AirqualitynpTestCase class:
+            Test command: "tethys test -f tethys_apps.tethysapp.airqualitynp.tests.tests.AirqualitynpTestCase.test_if_tethys_platform_is_great"
 
 To learn more about writing tests, see:
     https://docs.djangoproject.com/en/1.9/topics/testing/overview/#writing-tests
@@ -50,7 +50,7 @@ To learn more about writing tests, see:
 """
 
 
-class AirqualityTestCase(TethysTestCase):
+class AirqualitynpTestCase(TethysTestCase):
     """
     In this class you may define as many functions as you'd like to test different aspects of your app.
     Each function must start with the word "test" for it to be recognized and executed during testing.
@@ -64,7 +64,7 @@ class AirqualityTestCase(TethysTestCase):
         place that code here. For example, if you are testing against any persistent stores, you should call the
         test database creation function here, like so:
 
-            self.create_test_persistent_stores_for_app(Airquality)
+            self.create_test_persistent_stores_for_app(Airqualitynp)
 
         If you are testing against a controller that check for certain user info, you can create a fake test user and
         get a test client, like so:
@@ -94,7 +94,7 @@ class AirqualityTestCase(TethysTestCase):
         that took place before execution of the test functions. If you are testing against any persistent
         stores, you should call the test database destruction function from here, like so:
 
-            self.destroy_test_persistent_stores_for_app(Airquality)
+            self.destroy_test_persistent_stores_for_app(Airqualitynp)
 
         NOTE: You do not have to set these functions up here, but if they are not placed here and are needed
         then they must be placed at the very end of your individual test functions. Also, if certain
@@ -151,7 +151,7 @@ class AirqualityTestCase(TethysTestCase):
         c.force_login(user)
 
         # Have the test client "browse" to your home page
-        response = c.get('/apps/airquality/')  # The final '/' is essential for all pages/controllers
+        response = c.get('/apps/airqualitynp/')  # The final '/' is essential for all pages/controllers
 
         # Test that the request processed correctly (with a 200 status code)
         self.assertEqual(response.status_code, 200)

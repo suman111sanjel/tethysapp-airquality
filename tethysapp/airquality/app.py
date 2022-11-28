@@ -5,8 +5,7 @@ class Airquality(TethysAppBase):
     """
     Tethys app class for Airquality.
     """
-
-    name = 'Airquality'
+    name = 'Air Quality - HKH'
     index = 'airquality:home'
     icon = 'airquality/images/icon.gif'
     package = 'airquality'
@@ -28,7 +27,23 @@ class Airquality(TethysAppBase):
             UrlMap(
                 name='home',
                 url='airquality',
-                controller='airquality.controllers.home.home'
+                controller='airquality.controllers.home.Recent'
+            ), UrlMap(
+                name='Recent',
+                url='airquality/recent',
+                controller='airquality.controllers.home.Recent'
+            ), UrlMap(
+                name='Archive',
+                url='airquality/archive',
+                controller='airquality.controllers.home.Archive'
+            ), UrlMap(
+                name='Forecast',
+                url='airquality/forecast',
+                controller='airquality.controllers.home.Forecast'
+            ), UrlMap(
+                name='Emission',
+                url='airquality/emission',
+                controller='airquality.controllers.home.Emission'
             ),
             UrlMap(
                 name='aeronetData',
@@ -88,7 +103,29 @@ class Airquality(TethysAppBase):
                 url='airquality/getCityData',
                 controller='airquality.controllers.rest.getCityData',
             ),
+            UrlMap(
+                name='trueColorLegendImage',
+                url='airquality/trueColorLegendImage',
+                controller='airquality.controllers.viewer.trueColorLegendImage',
+            ),
+            UrlMap(
+                name='getCascaderData',
+                url='airquality/getCascaderData',
+                controller='airquality.api.getCascaderData'
+            ), UrlMap(
+                name='getChartDataProcess',
+                url='airquality/getChartDataProcess',
+                controller='airquality.api.getChartDataProcess'
+            ), UrlMap(
+                name='getLayerInfoStat',
+                url='airquality/getLayerInfoStat',
+                controller='airquality.api.getLayerInfoStat'
+            ),
+            UrlMap(
+                name='getDefaultstationForNepal',
+                url='airquality/defaultobservationstation',
+                controller='airquality.controllers.viewer.defaultobservationstation'
+            ),
         )
-
         return url_maps
 

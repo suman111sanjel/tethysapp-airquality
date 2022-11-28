@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import json
-from ..utilities import  GetCommonRequestData, regionGeojson, plotNcFile, gifNcFile, \
-    TimeSeriesModelDataCompute, SliceFromCatalog,getGeoJSONStations,getGeoJSONSofOnetations
+from ..utilities import GetCommonRequestData, regionGeojson, \
+    TimeSeriesModelDataCompute, SliceFromCatalog, getGeoJSONStations, getGeoJSONSofOnetations, getDefaultStation
 from ..config import DataDirLocation
 from django.http import JsonResponse, HttpResponse
 import ast
@@ -36,7 +36,7 @@ import urllib.request
 @permission_classes([])
 def WMSProxy(request,url):
     completeURL = str(request.build_absolute_uri())
-    url=completeURL.split('/apps/airquality/WMSProxy/')[-1]
+    url=completeURL.split('/apps/airqualitynp/WMSProxy/')[-1]
     url=url.replace('/wms/?Service','/wms?Service').replace('.ncml/?FORMAT','.ncml?FORMAT').replace('.ncml/?SERVICE','.ncml?SERVICE')
     request1 = urllib.request.Request(url)
     response = urllib.request.urlopen(request1).read()
@@ -326,4 +326,29 @@ def SlicedFromCatalog(request):
         data["status"]=500
         data["error"]='internal Server error'
         traceback.print_exc()
+    return JsonResponse(data)
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def trueColorLegendImage(request):
+    realPath = os.path.dirname(os.path.abspath(__file__))
+    completePath = os.path.join(realPath[:-11], 'workspaces', 'app_workspace', 'LegendImage', 'trueColorImage.png')
+    content_type = 'image/png'
+    zip_file = open(completePath, 'rb').read()
+    response = HttpResponse(zip_file, content_type=content_type)
+    return response
+
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def defaultobservationstation(request):
+    typeName = request.GET.get('typeName')
+    endDate = request.GET.get('endDate')
+    startDate = request.GET.get('startDate')
+    data = {}
+    data["defaultStation"]=getDefaultStation(typeName,startDate,endDate)
     return JsonResponse(data)

@@ -8,7 +8,7 @@ from sqlalchemy.pool import NullPool
 from sqlalchemy.orm import sessionmaker
 from ..config import DataBaseConnectionStrURL
 import traceback
-from ..model import MajorCity
+from ..model import MajorCity,NepalCity
 import ast
 
 
@@ -51,7 +51,8 @@ def getCityData(request):
             itemCur = {
                 "value": i.gid,
                 "label": i.cities,
-                "geoJSON": geoJSONCur}
+                "geoJSON": geoJSONCur
+            }
             allLocationData.append(itemCur)
         status = 200
     except:
