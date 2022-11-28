@@ -1,8 +1,8 @@
 import Style from "ol/style/Style";
-import RegularShape from "ol/style/RegularShape"
+import RegularShape from "ol/style/RegularShape";
 import Fill from "ol/style/Fill";
-import Stroke from "ol/style/Stroke"
-import Text from "ol/style/Text"
+import Stroke from "ol/style/Stroke";
+import Text from "ol/style/Text";
 import {TethysAppName, DefaultMaskWMS, DefaultPlotInfo, TethysAPIAppName} from "../config";
 
 
@@ -42,6 +42,7 @@ myApp.APICollection = {
         SlicedFromCatalog: '/apps/' + TethysAPIAppName + '/slicedfromcatalog/'
     }
 };
+
 
 myApp.constants = {
     recent: {
@@ -259,7 +260,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.recent.layerId.TerraModisTrueColor,
                     title: 'TerraModis-TrueColor (' + myApp.formatDate(myApp.startDate) + ')',
                     visible: true,
-                    opacity: 1,
+                    opacity: 0.5,
                     legendPath: '/static/' + TethysAppName + '/images/rgbLegend.png',
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
@@ -344,7 +345,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.archive.layerId.TerraModisTrueColor,
                     title: 'TerraModis-TrueColor',
                     visible: true,
-                    opacity: 1,
+                    opacity: 0.5,
                     legendPath: '/static/' + TethysAppName + '/images/rgbLegend.png',
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
@@ -382,7 +383,7 @@ myApp.LayerCollectionObjet = {
                     id: myApp.constants.archive.layerId.GEOS_PM2p5,
                     title: 'GEOS PM2.5',
                     visible: false,
-                    opacity: 0.6,
+                    opacity: 0.5,
                     ThreddsDataServerVersion: 5,
                     serverType: 'TDS',
                     timeSeries: false,
@@ -575,7 +576,6 @@ myApp.LayerCollectionObjet = {
                     }, chartDetail: {title: 'GEOS', unit: " O<sub>3</sub> (ppb)", SeriesName: "value"},
                 }
             },
-
             {
                 catalog: 'catalog/HKHAirQualityWatch/RecentAndArchive/SO2/TROPOMI-SO2/catalog.xml',
                 useSLD: false,
@@ -934,7 +934,6 @@ myApp.LayerCollectionObjet = {
                         return Object.assign(DefaultPlotInfo, {title: 'GEOS $PM_{2.5}$(µg/$m^{3}$)', TimeZone: ' UTC'})
                     },
                     chartDetail: {title: 'GEOS', unit: 'PM<sub>2.5</sub>(µg/m<sup>3</sup>)', SeriesName: "value"},
-
                 }
             }, {
                 catalog: 'catalog/HKHAirQualityWatch/Forecast/CO/GEOS-CO/catalog.xml',
@@ -1115,9 +1114,9 @@ myApp.LayerCollectionObjet = {
 };
 
 myApp.DefaultSations = {
-    aeronetAOD: [2, 5, 13, 6],
-    pm2p5Embassy: [6, 4, 2, 8],
-    o3Embassy: [6, 4, 7, 8]
+    aeronetAOD: [9, 14, 9, 14],
+    pm2p5Embassy: [6, 7, 6, 7],
+    o3Embassy: [6, 7, 6, 7]
 }
 
 myApp.cascaderObject = {
@@ -1234,7 +1233,6 @@ myApp.cascaderObject = {
                                 return 'Time (UTC)'
                             },
                             plotType: 'point'
-
                         }
                     },
                     {

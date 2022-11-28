@@ -1,7 +1,11 @@
+body {
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: subpixel-antialiased !important; //more fatty in safari
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   height: 100%;
   width: 100%;
 }
@@ -16,7 +20,7 @@ body {
 }
 
 .sidebar-main {
-  height: calc(100% - 50px);
+  height: calc(100% - 82px);
 }
 
 .el-header {
@@ -151,11 +155,123 @@ h1, h2, h3, h4, h5, h6 {
   height: auto;
 }
 
-.el-header{
-  height: 50px!important;
+.el-header {
+  height: 82px !important;
 }
 
-.airquality{
-    height: calc(100% - 50px);
-  background-color: rgb(156,180,190);
+.airquality {
+  //height: calc(100% - 82px);
+  height: 100%;
+  background-color: rgb(156, 180, 190);
 }
+
+
+.LayerDiv .custom-control-label::before, .LayerDiv .custom-control-label::after {
+  top: -0.5px;
+}
+
+.LayerDiv .layerCheckPadding {
+  padding-top: 7px;
+}
+
+.el-tabs__nav-scroll {
+  float: right;
+}
+
+.el-tabs__nav-wrap {
+  background-color: #007196bd;
+}
+
+.biglegend {
+  height: 100px !important;
+}
+
+.ol-control.ol-legend {
+  z-index: 89;
+}
+
+.col-md-5.flexBox.infoIconAbout button {
+  background-color: #007196;
+  margin-right: 23px;
+  float:right;
+}
+
+//.compute-now{
+//    background-color: #207b20;
+//}
+
+
+.timeSliderDiv.custom-thredd-Scroll.ol-control {
+    top: 10px;
+}
+.el-switch__label{
+  color:white;
+}
+
+
+
+
+// map control slider start
+.timeSliderDiv {
+  .time-map-title {
+    padding-top: 6px;
+    font-size: 12px;
+  }
+
+  .btn-group {
+    height: 25px;
+
+    .btn.btn-sm.btn-default {
+      padding: 2.5px 5px;
+      .glyphicon {
+        font-size: 10px;
+      }
+    }
+
+
+    .thredds-data-server-data-time {
+      font-size: 10px;
+      min-width: unset;
+      width: unset;
+      height: 25px;
+    }
+
+    .thredds-data-server-control-rangecontrol {
+      height: 25px;
+      width: 63px !important;
+
+      .thredds-data-server-slider-pic-range {
+        width: 50px !important;
+      }
+
+      .thredds-range{
+        height: 14px;
+      }
+    }
+
+    .thredds-data-server-control-rangecontrol.glyphicon-dashboard {
+      width: 100px !important;
+      font-size: 10px;
+
+      .thredds-data-server-slider-pic-range-fps {
+        width: 28px !important;
+      }
+    }
+  }
+}
+
+input[type=range].thredds-range::-moz-range-thumb {
+    height: 10px;
+    width: 2px;
+}
+input[type=range].thredds-range::-moz-range-track {
+    height: 2px;
+}
+.timeSliderDiv.custom-thredd-Scroll.ol-control{
+  height: 45px;
+  right: -2px!important;
+  top: -2px;
+}
+
+
+// map control slider end

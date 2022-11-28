@@ -9,28 +9,11 @@
     <div class="body-container">
       <el-scrollbar height="100%">
         <p style="text-align:justify;font-size:12px;">
-          ICIMOD is a regional intergovernmental learning and knowledge-sharing centre serving the eight regional member
-          countries of the Hindu Kush Himalaya (HKH) – Afghanistan, Bangladesh, Bhutan, China, India, Myanmar, Nepal,
-          and
-          Pakistan. Working in partnership with regional and international organizations, ICIMOD aims to influence
-          policy
-          and practices to meet environmental and livelihood challenges emerging in the HKH. ICIMOD provides a platform
-          for researchers, practitioners, and policy makers from the region and around the globe to generate and share
-          knowledge, support evidence-based decision making, and encourage regional cooperation.
+          The application is dashboard for air quality monitoring of Nepal.
+          The system consists of different pollutant data like PM2.5, AOD, O3, SO2, NO2, CO for different openly
+          available data source.
+        </p>
 
-        </p>
-        <p style="text-align:justify;font-size:12px;">
-          ICIMOD works through its six regional programmes: 1) Adaptation and Resilience Building, 2) Transboundary
-          Landscapes, 3) River Basins and Cryosphere, 4) Atmosphere, 5) Mountain Environment Regional Information
-          System,
-          and 6) Mountain Knowledge and Action Networks. These regional programmes are supported by four thematic areas
-          –
-          Livelihoods, Ecosystem Services, Water and Air, and Geospatial Solutions – and underpinned by the Knowledge
-          Management and Communication (KMC) Unit. The Regional Atmosphere Programme involves in identifying, testing,
-          and
-          piloting mitigation solutions; building capacity and outreach; fostering regional collaboration and building
-          cross-border networks; and contributing to policy at local, national, regional, and global levels.
-        </p>
         <el-button type="text" @click="centerDialogVisible = true">View More ..</el-button>
       </el-scrollbar>
     </div>
@@ -40,28 +23,22 @@
         v-model="centerDialogVisible"
         width="75%"
         center>
-      <span><div class="contributor" style="text-align: center;">
+      <span>
+        <div class="contributor" style="text-align: center;">
 <!--                    <img src="@/assets/USAIDlogo.png" style="height:50px;">-->
-        <!--                    <img src="@/assets/NASA_LOGO.png" style="height:50px;">-->
-                    <img src="@/assets/ICIMOD_Master_logo_Blue.png" style="height: 50px;position: relative;top: 5px;">
-        <!--                    <img src="@/assets/Servir_HKH_green.png" style="height: 30px;position: relative;top: -4px;">-->
+          <!--                    <img src="@/assets/NASA_LOGO.png" style="height:50px;">-->
+          <!--                    <img src="@/assets/ICIMOD_Master_logo_Blue.png" style="height: 50px;position: relative;top: 5px;">-->
+          <!--                    <img src="@/assets/Servir_HKH_green.png" style="height: 30px;position: relative;top: -4px;">-->
                 </div>
 <div>
-                            <p style="text-align:justify">
-ICIMOD is a regional intergovernmental learning and knowledge-sharing centre serving the eight regional member countries of the Hindu Kush Himalaya (HKH) – Afghanistan, Bangladesh, Bhutan, China, India, Myanmar, Nepal, and Pakistan. Working in partnership with regional and international organizations, ICIMOD aims to influence policy and practices to meet environmental and livelihood challenges emerging in the HKH. ICIMOD provides a platform for researchers, practitioners, and policy makers from the region and around the globe to generate and share knowledge, support evidence-based decision making, and encourage regional cooperation.
-                            </p>
-                            <p style="text-align:justify">
-ICIMOD works through its six regional programmes: 1) Adaptation and Resilience Building, 2) Transboundary Landscapes, 3) River Basins and Cryosphere, 4) Atmosphere, 5) Mountain Environment Regional Information System, and 6) Mountain Knowledge and Action Networks. These regional programmes are supported by four thematic areas – Livelihoods, Ecosystem Services, Water and Air, and Geospatial Solutions – and underpinned by the Knowledge Management and Communication (KMC) Unit. The Regional Atmosphere Programme involves in identifying, testing, and piloting mitigation solutions; building capacity and outreach; fostering regional collaboration and building cross-border networks; and contributing to policy at local, national, regional, and global levels.
-                            </p>
 
-<p style="text-align:justify">
-The Atmospheric Watch Initiative (AWI) was established in 2013 as part of our regional programme on Atmosphere. Until December 2019, this Initiative was known as the Atmosphere Initiative. AWI’s goal is to promote the adoption of effective measures and policies to reduce air pollution and its impacts within the HKH through improved knowledge and enhanced capacity of our regional partners. Its work includes improving scientific understanding of emissions sources, atmospheric processes and change, and air pollution impacts in the HKH. The initiative is involved in identifying, testing, and piloting mitigation solutions; building capacity and outreach; fostering regional collaboration and building cross-border networks; and contributing to policy at local, national, regional, and global levels.
-</p>
-
-  <p style="text-align:justify">
-AWI is developing an integrated information platform linking air quality data from various platforms for enhanced decision support in the region. This open source platform provides data analysis support to professionals responsible for air quality management and regulators. Users of this system will be able to compare different pollutants as well as single pollutant observation from different publicly available data repositories (in-situ, satellite, model) giving a wider understanding of the observed situation.
-  </p>
-
+        <p style="text-align:justify;font-size:12px;">
+          The application is dashboard for air quality monitoring of Nepal.
+          The system consists of different pollutant data like PM2.5, AOD, O3, SO2, NO2, CO for different openly available data source.
+        </p>
+      <p style="text-align:justify;font-size:12px;">
+          This application is supported by two initiative SERVIR-HKH and Atmospheric Watch Initiative (AWI) of ICIMOD.
+        </p>
                         </div>
       </span>
       <template #footer>

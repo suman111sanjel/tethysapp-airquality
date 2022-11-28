@@ -10,10 +10,21 @@ module.exports = {
             config.entryPoints.delete('app')
 
             // then add your own
-            config.entry('airquality')
-                .add('./src/airquality.js')
+            config.entry('airqualityRecent')
+                .add('./src/airqualityRecent.js')
                 .end()
-
+                .entry('airqualityArchive')
+                .add('./src/airqualityArchive.js')
+                .end()
+                .entry('airqualityForecast')
+                .add('./src/airqualityForecast.js')
+                .end()
+                .entry('emission')
+                .add('./src/airqualityEmission.js')
+                .end()
+                .entry('fwi')
+                .add('./src/fwi.js')
+                .end()
             config.module.rule('fonts').use('url-loader')
                 .loader('file-loader') // replaces the url-loader
                 .tap(options => Object.assign(options, {
@@ -44,15 +55,35 @@ module.exports = {
         plugins: [
             new CleanWebpackPlugin(),
         ],
-
     },
     pages: {
-        'apps/airquality': {
-            entry: 'src/airquality.js',
+        'apps/airquality/recent': {
+            entry: 'src/airqualityRecent.js',
             template: 'public/index.html',
-            filename: process.env.NODE_ENV === "production" ? '../../templates/airquality/Created_airquality.html' : 'apps/airquality/airquality.html',
-            title: 'Air Quality Watch Dashboard',
-            chunks: ['chunk-vendors', 'chunk-common', 'apps/airquality']
+            filename: process.env.NODE_ENV === "production" ? '../../templates/airquality/Created_airquality_recent.html' : 'apps/airquality/airquality_recent.html',
+            title: 'Air Quality Watch - HKH | Recent',
+            chunks: ['chunk-vendors', 'chunk-common', 'apps/airquality/recent']
+        },
+        'apps/airquality/archive': {
+            entry: 'src/airqualityArchive.js',
+            template: 'public/index.html',
+            filename: process.env.NODE_ENV === "production" ? '../../templates/airquality/Created_airquality_archive.html' : 'apps/airquality/airquality_archive.html',
+            title: 'Air Quality Watch - HKH | Archive',
+            chunks: ['chunk-vendors', 'chunk-common', 'apps/airquality/archive']
+        },
+        'apps/airquality/forecast': {
+            entry: 'src/airqualityForecast.js',
+            template: 'public/index.html',
+            filename: process.env.NODE_ENV === "production" ? '../../templates/airquality/Created_airquality_forecast.html' : 'apps/airquality/airquality_forecast.html',
+            title: 'Air Quality Watch - HKH | Forecast',
+            chunks: ['chunk-vendors', 'chunk-common', 'apps/airquality/forecast']
+        },
+        'apps/airquality/emission': {
+            entry: 'src/airqualityEmission.js',
+            template: 'public/index.html',
+            filename: process.env.NODE_ENV === "production" ? '../../templates/airquality/Created_emission.html' : 'apps/airquality/emission.html',
+            title: 'Emission | HKH',
+            chunks: ['chunk-vendors', 'chunk-common', 'apps/airquality/emission']
         },
     }
 }

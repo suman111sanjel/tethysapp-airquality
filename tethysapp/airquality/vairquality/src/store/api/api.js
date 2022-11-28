@@ -42,6 +42,21 @@ export async function getApiWithoutToken(action) {
     });
 };
 
+export async function getApiWithoutTokenAbsoluteURL(action) {
+    return await new Promise((resolve, reject) => {
+        actionBase.get(action).then(
+            res => {
+                resolve(res.data);
+            },
+            err => {
+                console.log("hello error getApiWithoutToken");
+                console.log(err);
+                reject(err);
+            }
+        );
+    });
+};
+
 // function getCookie(name) {
 //     let cookieValue = null;
 //     if (document.cookie && document.cookie !== '') {

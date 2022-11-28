@@ -72,7 +72,7 @@
               <el-button @click="Cancel">Cancel</el-button>
 
               <el-button type="primary" @click="submitForm('MapPrintValidateForm')"
-              >Submit
+              >Export map
               </el-button
               >
             </el-form-item>
@@ -104,6 +104,7 @@ import jsPDF from "jspdf/dist/jspdf.min";
 import eventHub from "../utils/utils";
 import mapLagend from "./mapLagend";
 import {Action} from "../store/actionType";
+
 export default {
   name: "PrintMap",
   data() {
@@ -114,7 +115,7 @@ export default {
       },
       AccordionActiveName: '',
       CheckSelectAll: false,
-      PROXY_PREFIX: Action.Base+'/apps/airquality/WMSProxy/',
+      PROXY_PREFIX: Action.Base + '/apps/airqualitynp/WMSProxy/',
       legendInfos: [],
       LegendUIList: []
     };
@@ -142,38 +143,39 @@ export default {
 
               const mapSize = this.mapObject.getSize();
               const mapResolution = this.mapObject.getView().getResolution();
-              this.mapObject.once("rendercomplete", () => {
-                // setting up the canvas
-                const canvas = document.createElement("canvas");
-                canvas.width = layout.mapFrameSizePxl[0];
-                canvas.height = layout.mapFrameSizePxl[1];
-                const context = canvas.getContext("2d");
+              this.mapObject.once("rendercomplete", async () => {
+                    // setting up the canvas
+                    const canvas = document.createElement("canvas");
+                    canvas.width = layout.mapFrameSizePxl[0];
+                    canvas.height = layout.mapFrameSizePxl[1];
+                    const context = canvas.getContext("2d");
 
-                // sort the legend by height
-                let legendInfos1 = this.legendInfos.filter(function (curObje) {
-                  return curObje.visible === true;
-                }).sort((item1, item2) => item1.imgHeight - item2.imgHeight);
+                    // sort the legend by height
+                    let legendInfos1 = this.legendInfos.filter(function (curObje) {
+                      return curObje.visible === true;
+                    }).sort((item1, item2) => item1.imgHeight - item2.imgHeight);
 
-                this.copyOLMapTo(context);
-                console.log(legendInfos1)
+                    this.copyOLMapTo(context);
 
-                legendInfos1.length && this.addLegendsTo(context, {
-                  legendInfos: legendInfos1,
-                  pos: layout.legendBoxPxl.pos,
-                  columnWidth: layout.legendBoxPxl.columnWidth,
-                  height: layout.legendBoxPxl.height
-                });
+                    if (legendInfos1.length || false) {
+                      await this.addLegendsTo(context, {
+                        legendInfos: legendInfos1,
+                        pos: layout.legendBoxPxl.pos,
+                        columnWidth: layout.legendBoxPxl.columnWidth,
+                        height: layout.legendBoxPxl.height,
+                      });
+                    }
 
-                this.drawPolygon(context, "black", layout.northArrowCoordsPxl)
-                this.drawScaleBar(context, {x: canvas.width, y: canvas.height})
-                context.strokeStyle = "black";
-                context.strokeRect(0, 0, canvas.width, canvas.height) // map frame border
+                    this.drawPolygon(context, "black", layout.northArrowCoordsPxl)
+                    this.drawScaleBar(context, {x: canvas.width, y: canvas.height})
+                    context.strokeStyle = "black";
+                    context.strokeRect(0, 0, canvas.width, canvas.height) // map frame border
 
-                this.createMapPDF(title, outputfilename, canvas, layout)
-                // reset original map size
-                this.mapObject.setSize(mapSize);
-                this.mapObject.getView().setResolution(mapResolution);
-                }
+                    this.createMapPDF(title, outputfilename, canvas, layout)
+                    // reset original map size
+                    this.mapObject.setSize(mapSize);
+                    this.mapObject.getView().setResolution(mapResolution);
+                  }
               );
               // set map size to print frame size
               const frameSize = layout.mapFrameSizePxl;
@@ -182,9 +184,7 @@ export default {
               this.mapObject.getView().setResolution(mapResolution / scaling);
 
             } else {
-
-              console.log('error submit!!')
-
+              console.log('error submit!!');
               return false
             }
           }
@@ -192,18 +192,15 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
-    }
-    ,
+    },
     Cancel() {
       this.PrintMapComponentData.PrintMapDialogVisible = false;
       this.backToNormal();
-    }
-    ,
+    },
     handleClose(done) {
       done();
       this.backToNormal();
-    }
-    ,
+    },
     backToNormal() {
       let target = document.querySelector('#map-container2');
       this.mapObject.setTarget(target);
@@ -250,18 +247,19 @@ export default {
         legendBoxPxl: {
           pos: legendPosPxl,
           height: legendHeightPxl,
-          columnWidth: 230
+          columnWidth: 260
         },
       };
-    }
-    ,
-
+    },
     copyOLMapTo(context) {
       context.fillStyle = "white";
       context.fillRect(0, 0, context.canvas.width, context.canvas.height);
       document.querySelectorAll(".ol-layer canvas").forEach(mapCanvas => {
         if (mapCanvas.width > 0) {
           const opacity = mapCanvas.parentNode.style.opacity;
+          console.log("-------");
+          console.log(opacity);
+          console.log("-------");
           context.globalAlpha = opacity === "" ? 1 : Number(opacity);
           // get the map's transform parameters from the style's transform matrix
           const matrix = (mapCanvas.style.transform).match(/^matrix\((.*)\)$/)[1].split(",").map(Number);
@@ -271,10 +269,17 @@ export default {
         }
       });
       context.setTransform(1, 0, 0, 1, 0, 0);
-    }
-    ,
-
-    addLegendsTo(context, {legendInfos, pos, columnWidth, height: maxHeight}) {
+    },
+    async addImageProcess(src) {
+      return new Promise((resolve, reject) => {
+        let img = new Image()
+        img.onload = () => resolve(img)
+        img.onerror = reject
+        img.setAttribute('crossorigin', 'anonymous');
+        img.src = src
+      })
+    },
+    async addLegendsTo(context, {legendInfos, pos, columnWidth, height: maxHeight}) {
       // debugger;
       const margin = 10;
       let offsetX = margin;
@@ -286,37 +291,74 @@ export default {
       // write legend title
       context.textBaseline = "bottom";
       context.fillStyle = "black";
-      context.font = "bold 25px Times"
+      context.font = "bold 25px Times";
       context.fillText("Legends", pos.x + margin, pos.y - margin);
       // create white canvas on legendbox
-      context.fillStyle = "white";
+      context.globalAlpha   = 1;
+      context.fillStyle = "black";
+      // context.zIndex = 2000000000000;
       context.fillRect(pos.x, pos.y, legendBoxWidth, legendBoxHeight);
       // configure text style
+      context.fillStyle =  "rgba(255, 255, 255, 0.5)";
       context.fillStyle = "black";
-      context.font = "100 18px Times";
-      legendInfos.forEach(legend => {
-        const itemHeight = legend.imgHeight + labelHeight + margin;
-        if (offsetY + itemHeight > maxHeight) {
-          offsetX += margin + columnWidth;
-          offsetY = margin;
-        }
-        const left = pos.x + offsetX;
-        const top = pos.y + offsetY;
-        const img = document.createElement("img");
-        // img.crossOrigin = "anonymous";
-        // img.setAttribute("src", '/static/AFWatershed/images/Afghanistan_logo.png');
-        img.setAttribute("src", legend.legendPath);
-        context.fillText(legend.title, left, top + labelHeight);
-        context.drawImage(img, left, top + labelHeight, legend.imgWidth, legend.imgHeight);
-        // update to offsetY
-        offsetY += itemHeight;
-      });
+      context.font = "18px Times";
+
+      for (let legend of legendInfos) {
+
+        await this.addImageProcess(legend.legendPath).then(img => {
+          const itemHeight = legend.imgHeight + labelHeight + margin;
+          if (offsetY + itemHeight > maxHeight) {
+            offsetX += margin + columnWidth;
+            offsetY = margin;
+          }
+          const left = pos.x + offsetX;
+          const top = pos.y + offsetY;
+
+          context.fillText(legend.title, left, top + labelHeight);
+          context.drawImage(img, left, top + labelHeight, legend.imgWidth, legend.imgHeight);
+          // update to offsetY
+          offsetY += itemHeight;
+          console.log(img);
+          console.log("img");
+        })
+      }
+
+      console.log("after img----");
+
+      // legendInfos.forEach(async legend => {
+      //
+      //   const itemHeight = legend.imgHeight + labelHeight + margin;
+      //   if (offsetY + itemHeight > maxHeight) {
+      //     offsetX += margin + columnWidth;
+      //     offsetY = margin;
+      //   }
+      //   const left = pos.x + offsetX;
+      //   const top = pos.y + offsetY;
+      //
+      //   var img = document.createElement("img");
+      //   // var img = new Image();
+      //   // img.onload = function () {
+      //   //   context.fillText(legend.title, left, top + labelHeight);
+      //   //   context.drawImage(img, left, top + labelHeight, legend.imgWidth, legend.imgHeight);
+      //   //   // update to offsetY
+      //   //   offsetY += itemHeight;
+      //   //   console.log(img);
+      //   // };
+      //
+      //   img.setAttribute('crossorigin', 'anonymous');
+      //   img.setAttribute("src", legend.legendPath);
+      //   // img.src = legend.legendPath;
+      //
+      //
+      //   context.fillText(legend.title, left, top + labelHeight);
+      //   context.drawImage(img, left, top + labelHeight, legend.imgWidth, legend.imgHeight);
+      //   // update to offsetY
+      //   offsetY += itemHeight;
+      // });
       context.lineWidth = 1;
       context.closePath();
       context.strokeRect(pos.x, pos.y, legendBoxWidth, legendBoxHeight);
-    }
-    ,
-
+    },
     getLegendBoxDimension(margin, labelHeight, columnWidth, legendInfos, maxBoxHeight) {
       let bottomMostLegendItemY = 0;
       const lastLegendItemPos = legendInfos.reduce((prevSize, legend) => {
@@ -332,9 +374,7 @@ export default {
       const width = lastLegendItemPos.x + columnWidth + margin;
       const height = bottomMostLegendItemY;
       return [width, height];
-    }
-    ,
-
+    },
     drawPolygon(context, color, coords) {
       context.lineWidth = 2;
       context.fillStyle = color;
@@ -345,9 +385,7 @@ export default {
       }
       context.closePath();
       context.fill();
-    }
-    ,
-
+    },
     drawScaleBar(context, rightBottomPos) {
       const {width, text} = this.getScaleBarInfo();
       const height = 30;
@@ -381,9 +419,7 @@ export default {
       context.fillStyle = "white";
       context.font = "15px Times";
       context.fillText(text, x + width / 2, y + height - margin);
-    }
-    ,
-
+    },
     createMapPDF(title, filename, mapCanvas, {margin, topMargin, mapFrameSize, pageDim, format}) {
       const pdf = new jsPDF("landscape", undefined, format);
       pdf.setFont("Times").setFontType("bold").setFontSize(15);
@@ -395,15 +431,12 @@ export default {
         // showErrorToast("Error Occurred! Please try it again.");
         console.log(error);
       }
-    }
-    ,
-
+    },
     getScaleBarInfo() {
       const scaleLine = document.querySelector(".ol-scale-line-inner");
 
       return {width: scaleLine.clientWidth, text: scaleLine.innerText};
-    }
-    ,
+    },
 
     proxifyWMSLayers() {
       this.TimeSeriesLayerCollection.forEach((layerobj) => {
@@ -414,13 +447,13 @@ export default {
             layer.AllLayersList.forEach((timeDimensionLayer) => {
               const source = timeDimensionLayer.getSource();
               const currUrl = source.getUrls()[0];
+              source.setProperties({'crossOrigin': 'Anonymous'})
               currUrl.includes(this.PROXY_PREFIX) || source.setUrls([this.PROXY_PREFIX + currUrl]);
             });
           }
         }
       });
-    }
-    ,
+    },
 
     deproxifyWMSLayers() {
       console.log('--------deproxy');
@@ -436,18 +469,15 @@ export default {
           }
         }
       });
-    }
-    ,
+    },
   },
   computed: {
     ...
         mapState(["PrintMapComponentData", "TimeSeriesLayerCollection", "mapObject"]),
-  }
-  ,
+  },
   mounted() {
     console.log("---------------------------------mounted----------------------------------");
-  }
-  ,
+  },
   beforeCreate() {
     eventHub.$on("OpenDialogOfPrintAndProxyfy", () => {
       let target = document.querySelector('#map-control-printing');
@@ -455,7 +485,6 @@ export default {
       console.log('this looks ok');
       this.mapObject.updateSize();
       this.CheckSelectAll = false;
-
       this.legendInfos = [];
       this.LegendUIList = [];
       this.proxifyWMSLayers();

@@ -9,7 +9,8 @@
 
     <div v-if="visualizationIn =='2Dimage'" class="position-relative  full-width full-height" ref="Image2D">
       <div class="download-map-Image" @click="downloadImage()">
-        <i class="fas fa-download"></i></div>
+        <i class="fas fa-download"></i>
+      </div>
       <div class="vertically-center">
         <img class="generated-image" :width="imageInfo.width" :src="imageInfo.url">
       </div>
@@ -65,8 +66,8 @@ export default {
     ...mapActions(["PostGetStationData", "PostGet2DImage", "TimeSeriesRasterQuery"]),
     async renderVisualization() {
       if (this.mapControlVariable.data_period == "Recent") {
-
         if (this.mapControlVariable.select_by == "Parameter") {
+
           let kk = this.getCascaderInfoObject(this.mapControlVariable.parameter_by_pollutant_value[1]);
           if (kk.stationData) {
             this.ObservationDatavisualization(kk, this.mapControlVariable["parameter_by_pollutant_value_stationData_val" + this.IndexValue]);
@@ -121,7 +122,7 @@ export default {
           if (kk.stationData) {
             this.ObservationDatavisualization(kk, this.mapControlVariable["parameter_by_pollutant_value_stationData_val" + this.IndexValue]);
           } else {
-            this.TimeSeriesPlot(kk, this.mapControlVariable["parameter_by_location__" + this.IndexValue].wktValue, this.mapControlVariable["parameter_by_location__" + this.IndexValue].geometryType);
+            this.TimeSeriesPlot(kk, this.mapControlVariable["parameter_by_location__" + this.IndexValue].wktValue, this.mapControlVariable["parameter_by_location__" + this.IndexValue].geometryType,this.mapControlVariable["parameter_by_location__" + this.IndexValue].default_level_value);
           }
         } else {
           //by location
@@ -130,7 +131,7 @@ export default {
             this.ObservationDatavisualization(kk, this.mapControlVariable["location_by_pollutant_value" + this.IndexValue][2]);
           } else {
             if (this.mapControlVariable.location_by_wktValue) {
-              this.TimeSeriesPlot(kk, this.mapControlVariable.location_by_wktValue, this.mapControlVariable.location_by_geometryType);
+              this.TimeSeriesPlot(kk, this.mapControlVariable.location_by_wktValue, this.mapControlVariable.location_by_geometryType,this.mapControlVariable.location_by_default_level_value);
             } else {
               this.$notify({
                 title: 'Warning',
@@ -138,17 +139,16 @@ export default {
                 type: 'warning'
               });
             }
-
           }
         }
       } else {
         if (this.mapControlVariable.select_by == "Parameter") {
           let kk = this.getCascaderInfoObject(this.mapControlVariable.parameter_by_pollutant_value[1]);
-          this.TimeSeriesPlot(kk, this.mapControlVariable["parameter_by_location__" + this.IndexValue].wktValue, this.mapControlVariable["parameter_by_location__" + this.IndexValue].geometryType);
+          this.TimeSeriesPlot(kk, this.mapControlVariable["parameter_by_location__" + this.IndexValue].wktValue, this.mapControlVariable["parameter_by_location__" + this.IndexValue].geometryType,this.mapControlVariable["parameter_by_location__" + this.IndexValue].default_level_value);
         } else {
           //by location
           let kk = this.getCascaderInfoObject(this.mapControlVariable["location_by_pollutant_value" + this.IndexValue][1]);
-          this.TimeSeriesPlot(kk, this.mapControlVariable.location_by_wktValue, this.mapControlVariable.location_by_geometryType);
+          this.TimeSeriesPlot(kk, this.mapControlVariable.location_by_wktValue, this.mapControlVariable.location_by_geometryType,this.mapControlVariable.location_by_default_level_value);
         }
       }
 
@@ -210,7 +210,7 @@ export default {
     downloadImage() {
       this.AirPollutionWatchApp.forceDownload(this.imageInfo.url, this.imageInfo.downloadFileName);
     },
-    async TimeSeriesPlot(kk, WKT, WKTType) {
+    async TimeSeriesPlot(kk, WKT, WKTType,default_level_value) {
 
       let layerBind = this.getBindedLayer(kk.layerId);
       let layer = layerBind.getLayer();
@@ -242,7 +242,12 @@ export default {
       let parsedData = await this.TimeSeriesRasterQuery(param);
       if (parsedData.status === 200) {
         let title = layerProperties.chartDetail.title + " values";
-        let subTitle = parsedData.geom;
+        let subTitle;
+        if (default_level_value) {
+          subTitle = default_level_value;
+        } else {
+          subTitle = parsedData.geom;
+        }
         let YaxisLabel = layerProperties.chartDetail.unit;
         let SeriesName = layerProperties.chartDetail.SeriesName;
         let highchartsObj = this.AirPollutionWatchApp.datetimeChartObj(title, subTitle, parsedData.SeriesData, SeriesName, YaxisLabel, parsedData.XaxisLabel, this.AirPollutionWatchApp.IndexColors[this.IndexValue - 1])

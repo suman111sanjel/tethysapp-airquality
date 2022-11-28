@@ -30,6 +30,7 @@ export default createStore({
                 is_AOI_Feature_selected: false,
                 location_by_wktValue: '',
                 location_by_geometryType: '',
+                location_by_default_level_value:'',
 
                 location_by_pollutant_value1: [],
                 location_by_pollutant_value2: [],
@@ -53,6 +54,7 @@ export default createStore({
                     wktValue: '',
                     geometryType: '',
                     featureExtent: '',
+                    default_level_value: '',
                 },
                 parameter_by_location__2: {
                     location_by: 'default_locations',
@@ -61,6 +63,7 @@ export default createStore({
                     wktValue: '',
                     geometryType: '',
                     featureExtent: '',
+                    default_level_value: '',
                 },
                 parameter_by_location__3: {
                     location_by: 'default_locations',
@@ -69,6 +72,7 @@ export default createStore({
                     wktValue: '',
                     geometryType: '',
                     featureExtent: '',
+                    default_level_value: '',
                 },
                 parameter_by_location__4: {
                     location_by: 'default_locations',
@@ -77,6 +81,7 @@ export default createStore({
                     wktValue: '',
                     geometryType: '',
                     featureExtent: '',
+                    default_level_value: '',
                 },
             },
 

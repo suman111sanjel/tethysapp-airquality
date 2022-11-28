@@ -1,20 +1,32 @@
 <template>
   <el-tabs type="border-card" class="tabs-outer" height="28px" v-model="currentTab" @tab-click="changePage">
 
-<!--    <el-tab-pane key="outlook" name="outlook" label="Dashboard" class="full-height">-->
-<!--      <outlookTabBody v-if="currentTab !='emission'"></outlookTabBody>-->
-<!--    </el-tab-pane>-->
+    <el-tab-pane key="Recent" name="Recent" label="Recent" class="full-height">
+      <TabBodyRecent v-if="currentTab ==='Recent'"></TabBodyRecent>
+    </el-tab-pane>
 
-    <el-tab-pane key="emission" name="emission" label="Emission" class="full-height">
-      <emissionTabBody v-if="currentTab ==='emission'"></emissionTabBody>
+    <el-tab-pane key="Archive" name="Archive" label="Archive" class="full-height">
+      <TabBodyArchive v-if="currentTab ==='Archive'"></TabBodyArchive>
+    </el-tab-pane>
+
+    <el-tab-pane key="Forecast" name="Forecast" label="Forecast" class="full-height">
+      <TabBodyForecast v-if="currentTab ==='Forecast'"></TabBodyForecast>
+    </el-tab-pane>
+
+    <el-tab-pane key="Forecast" name="Emission" label="Emission" class="full-height">
+      <TabBodyEmission v-if="currentTab ==='Emission'"></TabBodyEmission>
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script>
 import {TethysAppName} from "../config";
-import emissionTabBody from "./emissionTabBody";
 // import outlookTabBody from "./outlookTabBody";
+
+import TabBodyRecent from "./TabBodyRecent";
+import TabBodyArchive from "./TabBodyArchive";
+import TabBodyForecast from "./TabBodyForecast";
+import TabBodyEmission from "./TabBodyEmission";
 
 export default {
   name: "Tabs",
@@ -25,8 +37,10 @@ export default {
     },
   },
   components: {
-    emissionTabBody,
-    // outlookTabBody,
+    TabBodyRecent,
+    TabBodyArchive,
+    TabBodyForecast,
+    TabBodyEmission,
   },
   data() {
     return {selectedTab: 'emission'}
@@ -34,17 +48,14 @@ export default {
   methods: {
     changePage(evt) {
       var download = document.createElement('a');
-      // if (process.env.NODE_ENV === "development") {
-      //   if (evt.props.name === "current") {
-      //     download.href = "/current/";
-      //   } else {
-      //     download.href = "/outlook/";
-      //   }
-      // } else {
-      if (evt.props.name === "emission") {
-        download.href = "/apps/" + TethysAppName + "/emission/";
+      if (evt.props.name === "Recent") {
+        download.href = "/apps/" + TethysAppName + "/recent/";
+      } else if (evt.props.name === "Archive") {
+        download.href = "/apps/" + TethysAppName + "/archive/";
+      } else if (evt.props.name === "Forecast") {
+        download.href = "/apps/" + TethysAppName + "/forecast/";
       } else {
-        download.href = "/apps/" + TethysAppName + "/outlook/";
+        download.href = "/apps/" + TethysAppName + "/emission/";
       }
       // }
       download.click();
@@ -76,7 +87,6 @@ export default {
 }
 
 .el-tabs__nav-scroll {
-  background-color: rgb(60, 126, 165);
   color: white;
 }
 

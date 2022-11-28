@@ -39,3 +39,9 @@ export async function TimeSeriesRasterQuery(param){
         const response = await postApiWithoutToken(action,param);
         return response;
 }
+
+export async function getDefaultGroundObservation(param){
+        const action = Action.defaultObservationStation+"?typeName=" + param.typeName + "&startDate=" + param.startDate+ "&endDate=" + param.endDate
+        const response = await getApiWithoutToken(action);
+        return response;
+}

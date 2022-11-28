@@ -33,7 +33,6 @@
       </el-select>
 
       <div class="" v-show="parameter_by_location.location_by ==='AOI'">
-
         <div class="feature-selected" v-show="parameter_by_location.is_AOI_Feature_selected ===true">Feature selected
         </div>
         <div class="no-feature-selected" v-show="parameter_by_location.is_AOI_Feature_selected ===false">No Feature
@@ -91,49 +90,55 @@ export default {
 
 
       if (this.selectInteraction) {
-        if (this.parameter_by_location.location_by == "AOI") {
-          if (this.selectInteraction.getFeatures().getLength()) {
-            var features = this.selectInteraction.getFeatures();
-            features.forEach((f) => {
-              var format = new OLWKT();
-              wktfeaturegeom = format.writeGeometry(f.getGeometry(), {
-                dataProjection: 'EPSG:4326',
-                featureProjection: 'EPSG:3857'
+        if (this.SelectByOption == 'Parameter') {
+          if (this.parameter_by_location.location_by == "AOI") {
+            if (this.selectInteraction.getFeatures().getLength()) {
+              var features = this.selectInteraction.getFeatures();
+              features.forEach((f) => {
+                var format = new OLWKT();
+                wktfeaturegeom = format.writeGeometry(f.getGeometry(), {
+                  dataProjection: 'EPSG:4326',
+                  featureProjection: 'EPSG:3857'
+                });
+                geometryType = f.getGeometry().getType();
+
+                featureExtent = (new OLWKT()).readFeature(wktfeaturegeom);
+                featureExtent = featureExtent.getGeometry().getExtent();
+                f.set("SelectBy", "Parameter");
+                f.set("LocationBy", "AOI");
+                f.set("IndexValue", this.radioValue);
               });
-              geometryType = f.getGeometry().getType();
+            }
 
-              featureExtent = (new OLWKT()).readFeature(wktfeaturegeom);
-              featureExtent = featureExtent.getGeometry().getExtent();
-              f.set("SelectBy", "Parameter");
-              f.set("LocationBy", "AOI");
-              f.set("IndexValue", this.radioValue);
+            let countSelectedFeature = 0;
+            this.WorkingVectorLayer.getSource().getFeatures().forEach((f) => {
+              if (f.get("SelectBy") == "Parameter" && f.get("LocationBy") == "AOI" && f.get("IndexValue") == this.IndexValue) {
+                countSelectedFeature += 1;
+              }
             });
-          }
-
-          let countSelectedFeature = 0;
-          this.WorkingVectorLayer.getSource().getFeatures().forEach((f) => {
-            if (f.get("SelectBy") == "Parameter" && f.get("LocationBy") == "AOI" && f.get("IndexValue") == this.IndexValue) {
-              countSelectedFeature += 1;
+            console.log(countSelectedFeature + " | " + this.radioValue + " | " + this.IndexValue);
+            if (this.IndexValue == this.radioValue) {
+              if (countSelectedFeature) {
+                this.parameter_by_location.is_AOI_Feature_selected = true;
+                this.parameter_by_location.wktValue = wktfeaturegeom;
+                this.parameter_by_location.geometryType = geometryType;
+                this.parameter_by_location.featureExtent = featureExtent;
+              } else {
+                this.parameter_by_location.is_AOI_Feature_selected = false;
+                this.parameter_by_location.wktValue = '';
+                this.parameter_by_location.geometryType = '';
+                this.parameter_by_location.featureExtent = '';
+              }
             }
-          });
-          console.log(countSelectedFeature + " | " + this.radioValue + " | " + this.IndexValue);
-
-          if (this.IndexValue == this.radioValue) {
-            if (countSelectedFeature) {
-              this.parameter_by_location.is_AOI_Feature_selected = true;
-              this.parameter_by_location.wktValue = wktfeaturegeom;
-              this.parameter_by_location.geometryType = geometryType;
-              this.parameter_by_location.featureExtent = featureExtent;
-            } else {
-              this.parameter_by_location.is_AOI_Feature_selected = false;
-              this.parameter_by_location.wktValue = '';
-              this.parameter_by_location.geometryType = '';
-              this.parameter_by_location.featureExtent = '';
+          } else {
+            if (this.radioValue == this.IndexValue) {
+              this.selectInteraction.getFeatures().clear();
+              this.$notify({
+                title: 'Warning',
+                message: "To select this feature you need to select 'Select on map' from drop down menu",
+                type: 'warning'
+              });
             }
-          }
-        } else {
-          if (this.radioValue == this.IndexValue) {
-            this.selectInteraction.getFeatures().clear();
           }
         }
       }
@@ -141,6 +146,7 @@ export default {
   },
   watch: {
     SelectDefaultLocation(newVal, oldVal) {
+
       if (newVal) {
         // add it to vectorLayer
         let selNewValObj = this.Select_Option_Default_Location.filter(function (x) {
@@ -166,12 +172,13 @@ export default {
         featureExtent = featureExtent.getGeometry().getExtent();
         this.parameter_by_location.wktValue = wktfeaturegeom;
         this.parameter_by_location.geometryType = geometryType;
-        this.parameter_by_location.featureExtent = [featureExtent[0] - 5, featureExtent[1] - 3, featureExtent[2] + 5, featureExtent[3] + 3]
-
+        this.parameter_by_location.featureExtent = [featureExtent[0] - 5, featureExtent[1] - 3, featureExtent[2] + 5, featureExtent[3] + 3];
+        this.parameter_by_location.default_level_value = selNewValObj.label;
       } else {
         this.parameter_by_location.wktValue = '';
         this.parameter_by_location.geometryType = '';
         this.parameter_by_location.featureExtent = '';
+        this.parameter_by_location.default_level_value = '';
       }
       if (oldVal) {
         // remove it from vector layer
@@ -197,6 +204,8 @@ export default {
       return this.mapControlVariable["parameter_by_location__" + this.IndexValue.toString()];
     }, radioValue() {
       return this.mapControlVariable.radioValue;
+    }, SelectByOption() {
+      return this.mapControlVariable.select_by;
     }
   },
   beforeCreate() {
@@ -209,7 +218,7 @@ export default {
 
     eventHub.$on("SelectByParameterDefaultLocation", () => {
       console.log("okok")
-      var elem =this.$refs.defaultLocation.$el // Element to fire on
+      var elem = this.$refs.defaultLocation.$el // Element to fire on
       // debugger;
       elem.dispatchEvent(new Event("change")); // Fire event
     });

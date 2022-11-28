@@ -13,6 +13,8 @@ let AllMonths = {
     10: "November",
     11: "December"
 }
+
+
 var chartHelperObj = {};
 chartHelperObj.DateTickInterval__monthly = 30 * 24 * 3600 * 1000; //Month
 chartHelperObj.DateTickInterval__quartly = 30 * 24 * 3600 * 1000; //Month
@@ -180,4 +182,57 @@ export function CurrentDateFormat(){
         day = '0' + day;
 
     return [year, month, day].join('-');
+}
+
+export function getURLParameters() {
+    var vars = {};
+
+    window.location.href.split('#')[0].replace(/[?&]+([^=&]+)=([^&]*)/gi,
+        function (m, key, value) {
+            vars[key] = value;
+        });
+    return vars;
+}
+
+
+
+
+export function updateURLParameter(url, param, paramVal) {
+    var TheAnchor = null;
+    var newAdditionalURL = "";
+    var tempArray = url.split("?");
+    var baseURL = tempArray[0];
+    var additionalURL = tempArray[1];
+    var temp = "";
+    let tmpAnchor = '';
+    let TheParams = '';
+    if (additionalURL) {
+        tmpAnchor = additionalURL.split("#");
+        TheParams = tmpAnchor[0];
+        TheAnchor = tmpAnchor[1];
+        if (TheAnchor)
+            additionalURL = TheParams;
+
+        tempArray = additionalURL.split("&");
+
+        for (var i = 0; i < tempArray.length; i++) {
+            if (tempArray[i].split('=')[0] != param) {
+                newAdditionalURL += temp + tempArray[i];
+                temp = "&";
+            }
+        }
+    } else {
+        tmpAnchor = baseURL.split("#");
+        TheParams = tmpAnchor[0];
+        TheAnchor = tmpAnchor[1];
+
+        if (TheParams)
+            baseURL = TheParams;
+    }
+
+    if (TheAnchor)
+        paramVal += "#" + TheAnchor;
+
+    var rows_txt = temp + "" + param + "=" + paramVal;
+    return baseURL + "?" + newAdditionalURL + rows_txt;
 }

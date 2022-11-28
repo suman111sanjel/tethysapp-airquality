@@ -24,10 +24,12 @@
               class="full-height full-width padding-left-5 padding-bottom-10 padding-top-5 padding-right-5">
         <chartComponent></chartComponent>
       </el-col>
+
       <el-col :span="6"
               class="full-height full-width padding-left-5 padding-bottom-10 padding-top-5 padding-right-5">
         <chartComponent></chartComponent>
       </el-col>
+
     </el-row>
   </div>
 </template>

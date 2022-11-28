@@ -9,16 +9,14 @@ if (process.env.NODE_ENV === "production") {
     BaseUrl = 'http://smog.icimod.org';
 
 } else {
-
     BaseUrl = "http://localhost:8000";
 }
 
 export let Action = {
     Base: BaseUrl,
+    GeoServerBase:'http://smog.spatialapps.net:8080/geoserver',
     // Base : 'http://110.44.114.244:8001/',
     CityData: "apps/airquality/getCityData",
-
-
     Aeronet: 'apps/airquality/aeronetaodpm',
     USEmbassyAOD: 'apps/airquality/usembassypm',
     getGeoJSONofStations: 'apps/airquality/getGeoJSONofStations',
@@ -33,6 +31,14 @@ export let Action = {
     GetImage: 'apps/airquality/downloadImage',
     SlicedFromCatalog: 'apps/airquality/slicedfromcatalog/',
     TimeSeriesRasterQuery: 'apps/airquality/timeseriesmodeldata/',
+    trueColorLegendImage: 'apps/airquality/trueColorLegendImage/',
+    defaultObservationStation:'apps/airquality/defaultobservationstation/',
+
+
+    //emission
+    CascaderOptions:'apps/airquality/getCascaderData/',
+    ChartDataProcess:'apps/airquality/getChartDataProcess/',
+    LayerInfoStat:'apps/airquality/getLayerInfoStat/',
 
 
 };
