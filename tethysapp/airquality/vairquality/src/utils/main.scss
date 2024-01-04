@@ -1,0 +1,302 @@
+body {
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: subpixel-antialiased !important; //more fatty in safari
+}
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  height: 100%;
+  width: 100%;
+}
+
+html, body, .all-conts, .cont-outer {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.sidebar-main {
+  height: calc(100% - 82px);
+}
+
+.el-header {
+  padding: 0px;
+}
+
+
+.first-row {
+  height: 55%;
+}
+
+.second-row {
+  height: 45%;
+}
+
+.padding-top-10 {
+  padding-top: 10px !important;
+}
+
+.padding-top-5 {
+  padding-top: 5px !important;
+}
+
+.padding-right-10 {
+  padding-right: 10px !important;
+}
+
+.padding-right-5 {
+  padding-right: 5px !important;
+}
+
+.padding-bottom-10 {
+  padding-bottom: 10px !important;
+}
+
+.padding-bottom-5 {
+  padding-bottom: 5px !important;
+}
+
+.padding-left-10 {
+  padding-left: 10px !important;
+}
+
+.padding-left-5 {
+  padding-left: 5px !important;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.card-box {
+  border-radius: 5px;
+  background-color: #f0f0f0;
+}
+
+.pannel-title {
+  background-color: #007196;
+  color: white;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  height: 35px;
+}
+
+.title-heading {
+  height: 100%;
+  padding: 8px 2px 2px 10px;
+  margin-bottom: unset;
+}
+
+.h6, h6 {
+  font-size: 1rem;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+  margin-bottom: .5rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: .5rem;
+}
+
+.about-div .body-container {
+  padding: 10px;
+}
+
+.body-container {
+  font-size: 0.85em;
+}
+
+.body-container {
+  overflow: auto;
+}
+
+.el-col-24 .pannel-title, .el-col-24 .title-heading {
+  box-sizing: border-box;
+}
+
+.about-div .el-dialog__header {
+  background-color: rgb(60, 126, 165)
+}
+
+.about-div .el-dialog__title {
+  color: white;
+}
+
+
+.el-select-dropdown__item.optGroup {
+  font-weight: bold;
+}
+
+
+.el-form--inline .el-form-item {
+  margin-right: 0px;
+}
+
+
+.submit-btn .el-form-item__content {
+  width: 100%;
+}
+
+
+.time-layer-ledgend-div {
+  width: auto;
+  height: auto;
+}
+
+.el-header {
+  height: 82px !important;
+}
+
+.airquality {
+  //height: calc(100% - 82px);
+  height: 100%;
+  background-color: rgb(156, 180, 190);
+}
+
+
+.LayerDiv .custom-control-label::before, .LayerDiv .custom-control-label::after {
+  top: -0.5px;
+}
+
+.LayerDiv .layerCheckPadding {
+  padding-top: 7px;
+}
+
+.el-tabs__nav-scroll {
+  float: right;
+}
+
+.el-tabs__nav-wrap {
+  background-color: #007196bd;
+}
+
+.biglegend {
+  height: 100px !important;
+}
+
+.ol-control.ol-legend {
+  z-index: 89;
+}
+
+.col-md-5.flexBox.infoIconAbout button {
+  background-color: #007196;
+  margin-right: 23px;
+  float: right;
+}
+
+//.compute-now{
+//    background-color: #207b20;
+//}
+
+
+.timeSliderDiv.custom-thredd-Scroll.ol-control {
+  top: 10px;
+}
+
+.el-switch__label {
+  color: white;
+}
+
+
+// map control slider start
+.timeSliderDiv {
+  .time-map-title {
+    padding-top: 6px;
+    font-size: 12px;
+  }
+
+  .btn-group {
+    height: 25px;
+
+    .btn.btn-sm.btn-default {
+      padding: 2.5px 5px;
+
+      .glyphicon {
+        font-size: 10px;
+      }
+    }
+
+
+    .thredds-data-server-data-time {
+      font-size: 10px;
+      min-width: unset;
+      width: unset;
+      height: 25px;
+    }
+
+    .thredds-data-server-control-rangecontrol {
+      height: 25px;
+      width: 63px !important;
+
+      .thredds-data-server-slider-pic-range {
+        width: 50px !important;
+      }
+
+      .thredds-range {
+        height: 14px;
+      }
+    }
+
+    .thredds-data-server-control-rangecontrol.glyphicon-dashboard {
+      width: 100px !important;
+      font-size: 10px;
+
+      .thredds-data-server-slider-pic-range-fps {
+        width: 28px !important;
+      }
+    }
+  }
+}
+
+input[type=range].thredds-range::-moz-range-thumb {
+  height: 10px;
+  width: 2px;
+}
+
+input[type=range].thredds-range::-moz-range-track {
+  height: 2px;
+}
+
+.timeSliderDiv.custom-thredd-Scroll.ol-control {
+  height: 45px;
+  right: -2px !important;
+  top: -2px;
+}
+
+
+.aboutContent .el-collapse-item__content, .aboutContent .el-collapse-item__header, .aboutContent {
+  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(96, 98, 102) !important;
+  font-size: 14px;
+  line-height: 1.7692307692;
+  text-align: justify;
+  word-break: normal;
+}
+
+.aboutContent .el-collapse-item__header {
+  font-weight: bold;
+  line-height: 1.2;
+  font-size: 16.38px;
+}
+
+
+.el-dialog__title {
+  font-weight: bold!important;
+  font-family: Arial, Helvetica, sans-serif !important;
+   color: rgb(96, 98, 102) !important;
+}
+
+
+// map control slider end
